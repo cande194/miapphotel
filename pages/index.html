@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <title>Hotel Alejandro I</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400|Playfair+Display:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/villa/css/animate.css">
+    <link rel="stylesheet" href="../assets/villa/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/aos.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/style.css">
+    <link rel="stylesheet" href="../assets/custom/theme-royal.css"/>
+
+    <!-- ESTILOS MENÚ TRANSPARENTE + VIDEO HERO -->
+    <style>
+      .navbar{background-color:rgba(255,255,255,.15)!important;backdrop-filter:blur(10px);transition:background-color .4s ease;}
+      .navbar.scrolled{background-color:#fff!important;box-shadow:0 2px 10px rgba(0,0,0,.1);}
+      .navbar-nav .nav-link{position:relative;color:#fff!important;font-weight:500;margin:0 10px;transition:color .3s ease;}
+      .navbar-nav .nav-link::after{content:'';position:absolute;width:0%;height:2px;bottom:0;left:50%;background-color:#e61c5d;transition:all .3s ease;}
+      .navbar-nav .nav-link:hover::after{width:100%;left:0;}
+      .navbar-nav .nav-link:hover{color:#e61c5d!important;}
+      .btn-primary{background-color:#e61c5d;border:none;padding:8px 20px;border-radius:25px;font-weight:600;transition:transform .3s ease,background-color .3s ease;}
+      .btn-primary:hover{background-color:#c0174c;transform:scale(1.05);}
+
+      /* Video como fondo del HERO */
+      .video-hero {
+        position: relative;
+        height: 100vh;
+        min-height: 600px;
+        overflow: hidden;
+      }
+      .video-hero video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -1;
+        transform: translateX(-50%) translateY(-50%);
+        object-fit: cover;
+      }
+      .video-hero .container {
+        position: relative;
+        z-index: 2;
+      }
+      .video-hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- MENÚ FIJO TRANSPARENTE -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase text-white" href="index.html">Hotel Alejandro I</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+            <li class="nav-item"><a class="nav-link" href="comida.html">Comida</a></li>
+            <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="reseñas.html">Reseñas</a></li>
+            <li class="nav-item"><a class="nav-link" href="ubicacion.html">Ubicación</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+          </ul>
+          <a class="btn btn-primary ms-3 text-uppercase" href="mi-cuenta.html">Mi cuenta</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO CON VIDEO DE FONDO -->
+    <section class="site-hero video-hero overlay">
+      <!-- VIDEO DE FONDO -->
+      <video muted loop playsinline>
+        <source src="../assets/videos/VideoAlejandroI.mp4" type="video/mp4">
+        Tu navegador no soporta videos HTML5.
+      </video>
+
+      <!-- CONTENIDO ENCIMA DEL VIDEO -->
+      <div class="container">
+        <div class="row site-hero-inner justify-content-center align-items-center">
+          <div class="col-md-10 text-center">
+            <h1 class="heading text-white" data-aos="fade-up">Bienvenido a <em>Hotel Alejandro I</em></h1>
+            <p class="sub-heading text-white mb-5" data-aos="fade-up" data-aos-delay="100">
+              Descubrí la elegancia y confort de nuestro hotel en el corazón de Argentina.
+            </p>
+            <p data-aos="fade-up" data-aos-delay="100">
+              <a href="habitaciones.html" class="btn uppercase btn-primary mr-md-2 mr-0 mb-3 d-sm-inline d-block">Ver Habitaciones</a>
+              <a href="reserva.html" class="btn uppercase btn-outline-light d-sm-inline d-block">Reservar Ahora</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script src="../assets/villa/js/jquery-3.2.1.min.js"></script>
+    <script src="../assets/villa/js/popper.min.js"></script>
+    <script src="../assets/villa/js/bootstrap.min.js"></script>
+    <script src="../assets/villa/js/owl.carousel.min.js"></script>
+    <script src="../assets/villa/js/jquery.waypoints.min.js"></script>
+    <script src="../assets/villa/js/aos.js"></script>
+    <script src="../assets/villa/js/main.js"></script>
+
+    <!-- SCRIPT PARA CAMBIAR COLOR AL HACER SCROLL -->
+    <script>
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+
+      // Reproducir video sin bloqueo
+      document.addEventListener('DOMContentLoaded', () => {
+        const video = document.querySelector('video');
+        video.play().catch(() => {
+          console.warn('Autoplay bloqueado; el usuario debe interactuar.');
+        });
+      });
+    </script>
+  </body>
+</html>

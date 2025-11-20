@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <title>Ubicación - Hotel Alejandro I</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400|Playfair+Display:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/villa/css/animate.css">
+    <link rel="stylesheet" href="../assets/villa/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/aos.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/style.css">
+    <link rel="stylesheet" href="../assets/custom/theme-royal.css"/>
+
+    <style>
+      .navbar{background-color:rgba(255,255,255,.15)!important;backdrop-filter:blur(10px);transition:background-color .4s ease;}
+      .navbar.scrolled{background-color:#fff!important;box-shadow:0 2px 10px rgba(0,0,0,.1);}
+      .navbar-nav .nav-link{position:relative;color:#fff!important;font-weight:500;margin:0 10px;transition:color .3s ease;}
+      .navbar-nav .nav-link::after{content:'';position:absolute;width:0%;height:2px;bottom:0;left:50%;background-color:#e61c5d;transition:all .3s ease;}
+      .navbar-nav .nav-link:hover::after{width:100%;left:0;}
+      .navbar-nav .nav-link:hover{color:#e61c5d!important;}
+      .btn-primary{background-color:#e61c5d;border:none;padding:8px 20px;border-radius:25px;font-weight:600;transition:transform .3s ease,background-color .3s ease;}
+      .btn-primary:hover{background-color:#c0174c;transform:scale(1.05);}
+
+      #map{height:450px;width:100%;border:0;}
+
+      /* Estilos para las imágenes de abajo */
+      .location-image {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+
+      /* Héroe específico de Ubicación (como en Hotel/Comida/Servicios/Reseñas) */
+      .site-hero.hero-ubicacion{
+        min-height: calc(100vh - 80px);
+        padding-top: 100px;
+        padding-bottom: 40px;
+        background-size: cover;
+        background-position: center center;
+        display: flex;
+        align-items: center;
+      }
+
+      @media (max-width:768px){
+        .site-hero.hero-ubicacion{
+          min-height: calc(100vh - 70px);
+          padding-top: 90px;
+          padding-bottom: 30px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase text-white" href="index.html">Hotel Alejandro I</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+            <li class="nav-item"><a class="nav-link" href="comida.html">Comida</a></li>
+            <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="reseñas.html">Reseñas</a></li>
+            <li class="nav-item"><a class="nav-link active" href="ubicacion.html">Ubicación</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+          </ul>
+          <!-- Botón cambiado a Mi cuenta -->
+          <a class="btn btn-primary ms-3 text-uppercase" href="mi-cuenta.html">Mi cuenta</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- quitamos el div de 80px; el padding lo maneja el héroe -->
+
+    <section class="site-hero overlay hero-ubicacion" style="background-image: url('https://live.staticflickr.com/65535/52718193418_1227e3eb5c_b.jpg');">
+      <div class="container">
+        <div class="row site-hero-inner justify-content-center align-items-center">
+          <div class="col-md-10 text-center">
+            <h1 class="heading" data-aos="fade-up">¿Cómo Llegar?</h1>
+            <p class="sub-heading mb-5" data-aos="fade-up" data-aos-delay="100">Estamos en el corazón de Salta Capital</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-light">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-md-8">
+            <h2 class="heading" data-aos="fade-up">Hotel Alejandro I</h2>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">Ubicación privilegiada para explorar la ciudad y la región.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <h4>Dirección</h4>
+            <p><strong>Hotel Alejandro I</strong><br>
+            Av. Belgrano 252, A4400 Salta, Argentina<br>
+            Tel: <a href="tel:+543874311000">+54 387 431-1000</a><br>
+            Email: <a href="mailto:info@alejandroisalta.com">info@alejandroisalta.com</a></p>
+
+            <h4 class="mt-4">Cómo llegar</h4>
+            <ul>
+              <li><strong>Desde el aeropuerto:</strong> 20 min en auto (11 km) por RN-51 y Av. Belgrano.</li>
+              <li><strong>Desde terminal de ómnibus:</strong> 10 min en taxi (4 km) por Av. Belgrano.</li>
+              <li><strong>En colectivo:</strong> Líneas 2, 4, 7 y 8 tienen parada a 2 cuadras.</li>
+            </ul>
+          </div>
+          <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <!-- Mapa con puntero rojo -->
+            <iframe
+              id="map"
+              src="https://www.google.com/maps?q=Hotel+Alejandro+I+Av.+Belgrano+252+Salta+Argentina&output=embed"
+              width="100%"
+              height="450"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POR QUÉ NUESTRA UBICACIÓN ES IDEAL -->
+    <section class="section bg-white">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-md-8">
+            <h2 class="heading" data-aos="fade-up">¿Por qué nuestra ubicación es ideal?</h2>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">Estamos a pasos de los principales atractivos de Salta Capital.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Plaza 9 de Julio -->
+          <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.uhlUYdPpIpSCSoRt2U6xzQHaFj?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Plaza 9 de Julio" class="location-image">
+            <h5>🌳 Plaza 9 de Julio</h5>
+            <p>La plaza más emblemática de Salta, a solo 2 cuadras. Ideal para caminar, tomar mates y disfrutar de la arquitectura colonial.</p>
+          </div>
+
+          <!-- Paseo de los Poetas -->
+          <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <img src="https://1.bp.blogspot.com/-gRfsRpAPWd8/U6EBs9uM1pI/AAAAAAAAAHg/jC-M5DZy9K0/s1600/H+PASEO+DE+LOS+POETAS+3.jpg" alt="Paseo de los Poetas" class="location-image">
+            <h5>🛍 Paseo de los Poetas</h5>
+            <p>A 4 cuadras. Ideal para caminar, comprar artesanías y probar empanadas salteñas.</p>
+          </div>
+
+          <!-- Catedral Basílica de Salta -->
+          <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.A0tUUBvQl090EbZ6P6qcvgHaE8?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Catedral Basílica de Salta" class="location-image">
+            <h5>⛪ Catedral Basílica de Salta</h5>
+            <p>A 3 cuadras del hotel. Uno de los templos más bellos del país, con su interior dorado y su famosa imagen del Cristo de la Vera Cruz.</p>
+          </div>
+
+          <!-- Cerro San Bernardo -->
+          <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+            <img src="https://i0.wp.com/www.chetoba.com.ar/wp-content/uploads/2018/07/teleferico-de-salta.jpg?fit=800%2C449&ssl=1" alt="Cerro San Bernardo" class="location-image">
+            <h5>🌄 Cerro San Bernardo</h5>
+            <p>A 10 min en auto o teleférico. Vista panorámica de la ciudad y senderos para caminar.</p>
+          </div>
+
+          <!-- MAAM -->
+          <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+            <img src="https://i.ytimg.com/vi/xjWP838Ssz8/maxresdefault.jpg" alt="MAAM" class="location-image">
+            <h5>🎭 Museo de Arqueología de Alta Montaña (MAAM)</h5>
+            <p>A 5 cuadras. Conocé a los Niños del Llullaillaco y la historia precolombina de la región.</p>
+          </div>
+
+          <!-- Centro de Salta -->
+          <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.NP820nwUCA3oH99XTRnRqQHaFj?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Centro de Salta" class="location-image">
+            <h5>🚶 Acceso peatonal a todo</h5>
+            <p>Restaurantes, bares, cajeros, farmacias y tiendas a menos de 5 cuadras. Sin necesidad de auto.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="section footer-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Términos y Condiciones</a></li>
+              <li><a href="#">Política de Privacidad</a></li>
+              <li><a href="#">Ayuda</a></li>
+              <li><a href="#">Habitaciones</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Nuestra Ubicación</a></li>
+              <li><a href="#">Los Anfitriones</a></li>
+              <li><a href="#">Nosotros</a></li>
+              <li><a href="#">Contacto</a></li>
+              <li><a href="#">Restaurante</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5 pr-md-5 contact-info">
+            <p><span class="d-block">Dirección:</span> <span>Av. Belgrano 252, A4400 Salta, Argentina</span></p>
+            <p><span class="d-block">Teléfono:</span> <span>+54 387 431-1000</span></p>
+            <p><span class="d-block">Email:</span> <span>info@alejandroisalta.com</span></p>
+          </div>
+          <div class="col-md-3 mb-5">
+            <p>Suscríbete a nuestro boletín</p>
+            <form action="#" class="footer-newsletter">
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Tu email...">
+                <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row bordertop pt-5">
+          <p class="col-md-6 text-left">
+            Hotel Alejandro I - Experiencias que perduran en el tiempo. | &copy;
+            <script>document.write(new Date().getFullYear());</script> Todos los derechos reservados
+          </p>
+          <p class="col-md-6 text-right social">
+            <a href="#"><span class="fa fa-tripadvisor"></span></a>
+            <a href="#"><span class="fa fa-facebook"></span></a>
+            <a href="#"><span class="fa fa-twitter"></span></a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../assets/villa/js/jquery-3.2.1.min.js"></script>
+    <script src="../assets/villa/js/popper.min.js"></script>
+    <script src="../assets/villa/js/bootstrap.min.js"></script>
+    <script src="../assets/villa/js/owl.carousel.min.js"></script>
+    <script src="../assets/villa/js/jquery.waypoints.min.js"></script>
+    <script src="../assets/villa/js/aos.js"></script>
+    <script src="../assets/villa/js/main.js"></script>
+    <script>
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Hotel Alejandro I</title>
+
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+
+  <style>
+    html {
+      margin: 0;
+      padding: 0;
+      background: #777777; /* gris parecido al de "Mi cuenta" */
+    }
+    body {
+      margin: 0;
+      padding: 40px 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: #777777 url('../../../../imgs/fondo-mi-cuenta.jpg.jpg') no-repeat center center/cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      box-sizing: border-box;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.30);
+      z-index: 1;
+    }
+    .login-box {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.97);
+      padding: 2.5rem;
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      max-width: 480px;
+      width: 100%;
+    }
+    h2 {
+      color: #222;
+    }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: .4rem;
+    }
+    .small-muted {
+      font-size: .9rem;
+      color: #777;
+    }
+
+    /* Botón pastilla rosa (igual estilo que tus otros botones principales) */
+    .btn-pink {
+      width: 100%;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.7rem 1rem;
+      background: #e61c5d;
+      color: #fff;
+      border: none;
+    }
+    .btn-pink:hover {
+      background: #cf1451;
+      color: #fff;
+    }
+
+    /* Botón verde solo para "Crear cuenta" */
+    .btn-green {
+      width: 100%;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.7rem 1rem;
+      background: #28a745;
+      color: #fff;
+      border: none;
+    }
+    .btn-green:hover {
+      background: #23923d;
+      color: #fff;
+    }
+
+    #registroStaffWrapper {
+      display: none;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <!-- LOGIN -->
+    <h2 class="text-center mb-4">Acceso al sistema</h2>
+
+    <form onsubmit="loginAdmin(event)">
+      <div class="mb-3">
+        <label class="form-label">Correo</label>
+        <input type="email" class="form-control" id="adminEmail" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="adminPassword" required>
+      </div>
+      <!-- botón rosa principal -->
+      <button type="submit" class="btn btn-pink">Ingresar</button>
+    </form>
+
+    <div id="msgLogin" class="mt-2 small-muted"></div>
+
+    <hr class="mt-4 mb-3">
+
+    <!-- BOTÓN PARA MOSTRAR FORMULARIO DE REGISTRO (también rosa) -->
+    <button type="button"
+            class="btn btn-pink"
+            onclick="toggleRegistro()"
+            id="btnToggleRegistro">
+      Crear cuenta
+    </button>
+
+    <!-- BLOQUE DE REGISTRO (OCULTO AL INICIO) -->
+    <div id="registroStaffWrapper">
+      <div class="mb-2 section-title">Crear cuenta de personal</div>
+      
+
+      <form onsubmit="registrarStaff(event)">
+        <div class="mb-2">
+          <label class="form-label">Nombre completo</label>
+          <input type="text" class="form-control" id="staffNombre" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" id="staffEmail" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="staffPassword" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tipo de cuenta</label>
+          <select class="form-select" id="staffRol">
+            <option value="operador">Operador</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+        <!-- ESTE es el único botón verde -->
+        <button type="submit" class="btn btn-green">Crear cuenta</button>
+      </form>
+
+      <div id="msgRegistro" class="mt-2 small-muted"></div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="mi-cuenta.html" class="text-muted">← Volver</a>
+    </div>
+  </div>
+
+  <script>
+    // Mostrar / ocultar formulario de registro
+    function toggleRegistro() {
+      const wrapper = document.getElementById('registroStaffWrapper');
+      const btn = document.getElementById('btnToggleRegistro');
+
+      if (wrapper.style.display === 'none' || wrapper.style.display === '') {
+        wrapper.style.display = 'block';
+        btn.textContent = 'Ocultar creación de cuenta';
+      } else {
+        wrapper.style.display = 'none';
+        btn.textContent = 'Crear cuenta';
+      }
+    }
+
+    // LOGIN ADMIN / OPERADOR
+    async function loginAdmin(event) {
+      event.preventDefault();
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+      const msg = document.getElementById('msgLogin');
+      msg.style.color = '#777';
+      msg.textContent = 'Ingresando...';
+
+      try {
+        const res = await fetch('http://localhost:4000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          msg.style.color = '#c0392b';
+          msg.textContent = data.msg || '❌ Credenciales incorrectas';
+          return;
+        }
+
+        // { id, nombre, rol, token }
+        localStorage.setItem('token',    data.token);
+        localStorage.setItem('userRole', data.rol);
+        localStorage.setItem('userName', data.nombre);
+        localStorage.setItem('userEmail', email);
+
+        msg.style.color = '#27ae60';
+        msg.textContent = `Bienvenido ${data.nombre} (${data.rol})`;
+
+        if (data.rol === 'admin') {
+          window.location.href = 'admin-panel.html';
+        } else if (data.rol === 'operador') {
+          window.location.href = 'operador-panel.html';
+        } else {
+          msg.style.color = '#c0392b';
+          msg.textContent = '⚠️ Rol no autorizado para este acceso';
+        }
+
+      } catch (err) {
+        console.error(err);
+        msg.style.color = '#c0392b';
+        msg.textContent = 'Error al conectar con el servidor';
+      }
+    }
+
+    // REGISTRO STAFF (OPERADOR / ADMIN)
+    async function registrarStaff(event) {
+      event.preventDefault();
+
+      const nombre   = document.getElementById('staffNombre').value;
+      const email    = document.getElementById('staffEmail').value;
+      const password = document.getElementById('staffPassword').value;
+      const rol      = document.getElementById('staffRol').value;
+      const msg      = document.getElementById('msgRegistro');
+
+      msg.style.color = '#777';
+      msg.textContent = 'Creando cuenta...';
+
+      try {
+        const res = await fetch('http://localhost:4000/api/auth/registro', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, email, password, rol })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          msg.style.color = '#c0392b';
+          msg.textContent = (data && data.msg) || 'No se pudo crear la cuenta';
+          return;
+        }
+
+        msg.style.color = '#27ae60';
+        msg.textContent = '✅ Cuenta creada correctamente. Ahora podés iniciar sesión arriba.';
+        document.getElementById('staffNombre').value   = '';
+        document.getElementById('staffEmail').value    = '';
+        document.getElementById('staffPassword').value = '';
+        document.getElementById('staffRol').value      = 'operador';
+
+      } catch (err) {
+        console.error(err);
+        msg.style.color = '#c0392b';
+        msg.textContent = '⚠️ Error al conectar con el servidor';
+      }
+    }
+  </script>
+</body>
+</html>

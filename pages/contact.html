@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <title>Contacto - Hotel Alejandro I</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400|Playfair+Display:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/villa/css/animate.css">
+    <link rel="stylesheet" href="../assets/villa/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/aos.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/style.css">
+    <link rel="stylesheet" href="../assets/custom/theme-royal.css"/>
+
+    <style>
+      .navbar{
+        background-color:rgba(255,255,255,.15)!important;
+        backdrop-filter:blur(10px);
+        transition:background-color .4s ease;
+      }
+      .navbar.scrolled{
+        background-color:#fff!important;
+        box-shadow:0 2px 10px rgba(0,0,0,.1);
+      }
+      .navbar-nav .nav-link{
+        position:relative;
+        color:#fff!important;
+        font-weight:500;
+        margin:0 10px;
+        transition:color .3s ease;
+      }
+      .navbar-nav .nav-link::after{
+        content:'';
+        position:absolute;
+        width:0%;
+        height:2px;
+        bottom:0;
+        left:50%;
+        background-color:#e61c5d;
+        transition:all .3s ease;
+      }
+      .navbar-nav .nav-link:hover::after{
+        width:100%;
+        left:0;
+      }
+      .navbar-nav .nav-link:hover{
+        color:#e61c5d!important;
+      }
+      .btn-primary{
+        background-color:#e61c5d;
+        border:none;
+        padding:8px 20px;
+        border-radius:25px;
+        font-weight:600;
+        transition:transform .3s ease,background-color .3s ease;
+      }
+      .btn-primary:hover{
+        background-color:#c0174c;
+        transform:scale(1.05);
+      }
+
+      /* Héroe Contacto igual al resto */
+      .site-hero.hero-contacto{
+        min-height:calc(100vh - 80px);
+        padding-top:100px;
+        padding-bottom:40px;
+        background-size:cover;
+        background-position:center center;
+        display:flex;
+        align-items:center;
+      }
+      @media (max-width:768px){
+        .site-hero.hero-contacto{
+          min-height:calc(100vh - 70px);
+          padding-top:90px;
+          padding-bottom:30px;
+        }
+      }
+
+      /* Tarjeta del formulario */
+      .contact-card{
+        background:#fff;
+        border-radius:10px;
+        box-shadow:0 2px 10px rgba(0,0,0,.1);
+        padding:40px 30px;
+        margin-top:-60px;
+        position:relative;
+        z-index:2;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase text-white" href="index.html">Hotel Alejandro I</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+            <li class="nav-item"><a class="nav-link" href="comida.html">Comida</a></li>
+            <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="reseñas.html">Reseñas</a></li>
+            <li class="nav-item"><a class="nav-link" href="ubicacion.html">Ubicación</a></li>
+            <li class="nav-item"><a class="nav-link active" href="contact.html">Contacto</a></li>
+          </ul>
+          <!-- Botón igual que en el resto -->
+          <a class="btn btn-primary ms-3 text-uppercase" href="mi-cuenta.html">Mi cuenta</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sin div de 80px, el padding lo maneja el héroe -->
+    <section class="site-hero overlay hero-contacto"
+      style="background-image:url('https://www.oficinasmontiel.com/blog/wp-content/uploads/2024/06/369-scaled.jpg');">
+      <!-- podés cambiar esta URL por la que tenías -->
+      <div class="container">
+        <div class="row site-hero-inner justify-content-center align-items-center">
+          <div class="col-md-10 text-center">
+            <h1 class="heading" data-aos="fade-up">Contacto</h1>
+            <p class="sub-heading mb-5" data-aos="fade-up" data-aos-delay="100">
+              Contáctanos para consultas, reservas especiales o eventos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="contact-card" data-aos="fade-up">
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <h3 class="mb-3">Escribinos</h3>
+                  <form id="formContacto">
+                    <div class="form-group mb-3">
+                      <label for="nombre">Nombre</label>
+                      <input type="text" id="nombre" class="form-control" placeholder="Tu nombre" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                      <label for="telefono">Teléfono</label>
+                      <input type="text" id="telefono" class="form-control" placeholder="Tu teléfono" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                      <label for="email">Email</label>
+                      <input type="email" id="email" class="form-control" placeholder="Tu email" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                      <label for="mensaje">Mensaje</label>
+                      <textarea id="mensaje" rows="4" class="form-control" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                  </form>
+
+                </div>
+
+                <div class="col-md-6">
+                  <h3 class="mb-3">Información de contacto</h3>
+                  <p><strong>Dirección:</strong><br>Av. Belgrano 252, A4400 Salta, Argentina</p>
+                  <p><strong>Teléfono:</strong><br><a href="tel:+543874311000">+54 387 431-1000</a></p>
+                  <p><strong>Email:</strong><br><a href="mailto:info@alejandroisalta.com">info@alejandroisalta.com</a></p>
+                  <p><strong>Horario de atención:</strong><br>Recepción 24 hs. Respuesta a correos de 9 a 18 hs.</p>
+                  <p><strong>Redes sociales:</strong></p>
+                  <p class="social">
+                    <a href="#"><span class="fa fa-facebook"></span></a>
+                    <a href="#"><span class="fa fa-twitter"></span></a>
+                    <a href="#"><span class="fa fa-instagram"></span></a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="section footer-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Términos y Condiciones</a></li>
+              <li><a href="#">Política de Privacidad</a></li>
+              <li><a href="#">Ayuda</a></li>
+              <li><a href="#">Habitaciones</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Nuestra Ubicación</a></li>
+              <li><a href="#">Los Anfitriones</a></li>
+              <li><a href="#">Nosotros</a></li>
+              <li><a href="#">Contacto</a></li>
+              <li><a href="#">Restaurante</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5 pr-md-5 contact-info">
+            <p><span class="d-block">Dirección:</span> <span>Av. Belgrano 252, A4400 Salta, Argentina</span></p>
+            <p><span class="d-block">Teléfono:</span> <span>+54 387 431-1000</span></p>
+            <p><span class="d-block">Email:</span> <span>info@alejandroisalta.com</span></p>
+          </div>
+          <div class="col-md-3 mb-5">
+            <p>Suscríbete a nuestro boletín</p>
+            <form action="#" class="footer-newsletter">
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Tu email...">
+                <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row bordertop pt-5">
+          <p class="col-md-6 text-left">
+            Hotel Alejandro I - Experiencias que perduran en el tiempo. |
+            &copy; <script>document.write(new Date().getFullYear());</script> Todos los derechos reservados
+          </p>
+          <p class="col-md-6 text-right social">
+            <a href="#"><span class="fa fa-tripadvisor"></span></a>
+            <a href="#"><span class="fa fa-facebook"></span></a>
+            <a href="#"><span class="fa fa-twitter"></span></a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../assets/villa/js/jquery-3.2.1.min.js"></script>
+    <script src="../assets/villa/js/popper.min.js"></script>
+    <script src="../assets/villa/js/bootstrap.min.js"></script>
+    <script src="../assets/villa/js/owl.carousel.min.js"></script>
+    <script src="../assets/villa/js/jquery.waypoints.min.js"></script>
+    <script src="../assets/villa/js/aos.js"></script>
+    <script src="../assets/villa/js/main.js"></script>
+    <script>
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+    </script>
+    <script>
+    document.getElementById("formContacto").addEventListener("submit", async function(e){
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const mensaje = document.getElementById("mensaje").value.trim();
+
+      if (!nombre || !email || !mensaje) {
+        alert("Completá nombre, email y mensaje.");
+        return;
+      }
+
+      const res = await fetch("http://localhost:4000/api/mail/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, telefono, email, mensaje })
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        alert("Mensaje enviado correctamente. ¡Gracias por contactarnos!");
+        document.getElementById("formContacto").reset();
+      } else {
+        alert("Error al enviar el mensaje. Intente nuevamente.");
+      }
+    });
+    </script>
+
+  </body>
+</html>
+<script>
+document.getElementById("formContacto").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = {
+    nombre: document.getElementById("nombre").value,
+    telefono: document.getElementById("telefono").value,
+    email: document.getElementById("email").value,
+    mensaje: document.getElementById("mensaje").value
+  };
+
+  const res = await fetch("http://localhost:4000/api/mail/contacto", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  const r = await res.json();
+
+  if (r.ok) {
+    alert("Mensaje enviado correctamente 😊");
+    document.getElementById("formContacto").reset();
+  } else {
+    alert("Error al enviar mensaje ❌");
+  }
+});
+</script>

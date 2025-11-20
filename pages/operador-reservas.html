@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Reservas - Operador</title>
+
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/custom/admin.css">
+  <link rel="stylesheet" href="../assets/custom/admin-layout.css">
+</head>
+
+<body data-page="operador-reservas">
+
+  <!-- TOPBAR OPERADOR -->
+  <div id="topbar"></div>
+  <script>
+    fetch("../components/topbar-operador.html")
+      .then(r => r.text())
+      .then(html => document.querySelector("#topbar").innerHTML = html);
+  </script>
+
+  <div class="container mt-4">
+
+    <h2>📅 Reservas del Operador</h2>
+
+    <!-- FORM NUEVA RESERVA -->
+    <div class="card p-3 mb-4">
+      <h4>Nueva Reserva</h4>
+
+      <div class="row">
+        <div class="col-md-3">
+          <label>Usuario ID</label>
+          <input id="usuario_id" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+          <label>Habitación ID</label>
+          <input id="habitacion_id" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+          <label>Check-in</label>
+          <input type="datetime-local" id="checkin" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+          <label>Check-out</label>
+          <input type="datetime-local" id="checkout" class="form-control">
+        </div>
+
+        <div class="col-md-3 mt-3">
+          <label>Total</label>
+          <input id="total" class="form-control" placeholder="0.00">
+        </div>
+
+        <div class="col-md-12 mt-3">
+          <button onclick="crearReserva()" class="btn btn-primary w-100">
+            ➕ Crear Reserva
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA RESERVAS -->
+    <table class="table table-bordered" id="tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Habitación</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Estado</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+  </div>
+
+  <script src="../assets/Habitaciones.js"></script>
+  <script src="../assets/NuevaReserva.js"></script>
+
+  <script>
+    async function cargarReservas() {
+      const r = await fetch("/api/operador/reservas");
+      const data = await r.json();
+
+      const tb = document.querySelector("#tabla tbody");
+      tb.innerHTML = "";
+
+      data.reservas.forEach(x => {
+        tb.innerHTML += `
+          <tr>
+            <td>${x.id}</td>
+            <td>${x.habitacion}</td>
+            <td>${x.checkin}</td>
+            <td>${x.checkout}</td>
+            <td>${x.estado}</td>
+            <td>$${x.total}</td>
+            <td>
+              <button class="btn btn-success btn-sm" onclick="finalizar(${x.id})">Finalizar</button>
+              <button class="btn btn-danger btn-sm" onclick="cancelar(${x.id})">Cancelar</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function finalizar(id) {
+      await fetch(`/api/operador/reservas/${id}/finalizar`, { method: "POST" });
+      cargarReservas();
+    }
+
+    async function cancelar(id) {
+      await fetch(`/api/operador/reservas/${id}/cancelar`, { method: "POST" });
+      cargarReservas();
+    }
+
+    cargarReservas();
+  </script>
+
+</body>
+</html>

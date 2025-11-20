@@ -1,0 +1,130 @@
+:root{
+  --bg:#f7f6f5;
+  --card:#ffffff;
+  --txt:#1f1f1f;
+  --muted:#6c757d;
+  --brand:#e61c5d;
+  --brand-700:#c3184f;
+  --stroke:#e9ecef;
+  --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+}
+
+*{box-sizing:border-box}
+html,body{background:var(--bg); color:var(--txt);}
+
+.container-admin{max-width:1180px;margin:32px auto;padding:0 20px}
+.h1{font-family: "Playfair Display", Georgia, serif; font-size:44px; margin:10px 0 6px;}
+.p-muted{color:var(--muted); margin:0 0 22px; font-size:18px}
+
+.card{
+  background:var(--card); border:1px solid var(--stroke);
+  border-radius:18px; padding:22px; box-shadow:0 6px 18px rgba(0,0,0,.04);
+}
+
+.toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:14px 0 16px}
+.input{
+  width:320px; padding:10px 12px; border:1px solid var(--stroke); border-radius:12px; outline:none;
+  background:#fff; font-size:14px;
+}
+.btn{
+  appearance:none; border:none; cursor:pointer; font-weight:600; border-radius:999px;
+  padding:10px 18px; transition:.2s; font-size:14px;
+}
+.btn-brand{background:var(--brand); color:#fff} .btn-brand:hover{background:var(--brand-700)}
+.btn-ghost{background:transparent;border:1px solid var(--stroke);color:var(--txt)}
+.btn-ghost:hover{border-color:#d0d5db;background:#fff}
+
+.table{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:14px; border:1px solid var(--stroke)}
+.table thead th{background:#fcfcfc; text-align:left; font-weight:700; padding:12px 14px; border-bottom:1px solid var(--stroke)}
+.table tbody td{padding:12px 14px; border-bottom:1px solid var(--stroke)}
+.table tbody tr:nth-child(odd){background:#fff}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.badge-ok{color:#064e3b;background:#dcfce7}
+.badge-warn{color:#7c2d12;background:#ffedd5}
+.badge-bad{color:#7f1d1d;background:#fee2e2}
+.badge-neutral{color:#1f2937;background:#e5e7eb}
+
+.actions{display:flex;gap:8px}
+
+/* Apago el anillo rojo por defecto */
+.btn:focus,
+.btn:active,
+.btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Anillos personalizados por acción */
+.ring-open:focus,
+.ring-open:focus-visible {
+  box-shadow: 0 0 0 .25rem rgba(25, 135, 84, .35);   /* verde */
+}
+
+.ring-occupy:focus,
+.ring-occupy:focus-visible {
+  box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .35);   /* rojo */
+}
+
+.ring-maint:focus,
+.ring-maint:focus-visible {
+  box-shadow: 0 0 0 .25rem rgba(255, 193, 7, .45);   /* amarillo */
+}
+
+/* Un toque de hover para reforzar la acción (opcional) */
+.ring-open:hover { background: #e8f5ee; color: #198754; }
+.ring-occupy:hover { background: #fdecec; color: #dc3545; }
+.ring-maint:hover { background: #fff7e0; color: #b68600; }
+
+/* ===== Topbar ===== */
+.topbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: #f7f5f4; /* fondo claro que venís usando */
+  border-bottom: 1px solid rgba(0,0,0,.06);
+  backdrop-filter: blur(4px);
+}
+.topbar .wrap {
+  max-width: 1180px; margin: 0 auto; padding: 10px 16px;
+  display:flex; align-items:center; gap:14px;
+}
+.brand {
+  font-weight: 800; letter-spacing:.5px; font-size: 18px;
+}
+.brand .dot { color:#e61c5d; } /* tu rosa */
+.nav {
+  display:flex; gap:8px; margin-left:16px; flex-wrap:wrap;
+}
+.nav a {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:10px; text-decoration:none;
+  color:#333; transition:all .15s ease;
+}
+.nav a:hover { background:#efeceb; }
+.nav a.active {
+  background:#e61c5d; color:white; box-shadow:0 2px 10px rgba(230,28,93,.2);
+}
+.spacer { flex:1; }
+
+.user {
+  display:flex; align-items:center; gap:10px;
+  padding:6px 10px; border-radius:12px; background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+}
+.badge-role {
+  font-size:12px; padding:2px 8px; border-radius:999px;
+  background:#ffe3ec; color:#d81b60; font-weight:600;
+}
+
+/* Botón “Cerrar sesión” en la tira de usuario */
+.user .logout {
+  border:none; background:transparent; color:#666; cursor:pointer;
+  padding:6px 8px; border-radius:8px;
+}
+.user .logout:hover { background:#efeceb; }
+
+/* Breadcrumb opcional */
+.breadcrumb {
+  max-width:1180px; margin:10px auto 0; padding:0 16px 8px;
+  color:#777; font-size:13px;
+}
+.breadcrumb a { color:#555; text-decoration:none; }
+.breadcrumb a:hover { text-decoration:underline; }

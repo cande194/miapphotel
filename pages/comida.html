@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <title>Comida - Hotel Alejandro I</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400|Playfair+Display:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/villa/css/animate.css">
+    <link rel="stylesheet" href="../assets/villa/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/aos.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/style.css">
+    <link rel="stylesheet" href="../assets/custom/theme-royal.css"/>
+
+    <style>
+      .navbar{background-color:rgba(255,255,255,.15)!important;backdrop-filter:blur(10px);transition:background-color .4s ease;}
+      .navbar.scrolled{background-color:#fff!important;box-shadow:0 2px 10px rgba(0,0,0,.1);}
+      .navbar-nav .nav-link{position:relative;color:#fff!important;font-weight:500;margin:0 10px;transition:color .3s ease;}
+      .navbar-nav .nav-link::after{content:'';position:absolute;width:0%;height:2px;bottom:0;left:50%;background-color:#e61c5d;transition:all .3s ease;}
+      .navbar-nav .nav-link:hover::after{width:100%;left:0;}
+      .navbar-nav .nav-link:hover{color:#e61c5d!important;}
+      .btn-primary{background-color:#e61c5d;border:none;padding:8px 20px;border-radius:25px;font-weight:600;transition:transform .3s ease,background-color .3s ease;}
+      .btn-primary:hover{background-color:#c0174c;transform:scale(1.05);}
+
+      /* Héroe específico para Comida (centrado vertical) */
+      .site-hero.hero-comida {
+        min-height: calc(100vh - 80px);
+        padding-top: 100px;
+        padding-bottom: 40px;
+        background-size: cover;
+        background-position: center center;
+        display: flex;
+        align-items: center;
+      }
+
+      @media (max-width: 768px) {
+        .site-hero.hero-comida {
+          min-height: calc(100vh - 70px);
+          padding-top: 90px;
+          padding-bottom: 30px;
+        }
+      }
+
+      /* Estilos para tarjetas horizontales tipo hotel */
+      .food-section {
+        padding: 80px 0;
+      }
+
+      .food-half {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 60px;
+      }
+
+      .food-half .image {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 400px;
+        width: 100%;
+      }
+
+      .food-half .text {
+        padding: 40px;
+        background: #fff;
+      }
+
+      @media (min-width: 768px) {
+        .food-half {
+          flex-direction: row;
+        }
+
+        .food-half .image,
+        .food-half .text {
+          width: 50%;
+        }
+
+        .food-half.order-lg .image { order: 2; }
+        .food-half.order-lg .text  { order: 1; }
+      }
+
+      /* Estilos para PDF embebido */
+      .pdf-container {
+        display: none;
+        margin-top: 20px;
+      }
+
+      .pdf-container iframe {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase text-white" href="index.html">Hotel Alejandro I</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+            <li class="nav-item"><a class="nav-link" href="comida.html">Comida</a></li>
+            <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="reseñas.html">Reseñas</a></li>
+            <li class="nav-item"><a class="nav-link" href="ubicacion.html">Ubicación</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+          </ul>
+          <a class="btn btn-primary ms-3 text-uppercase" href="mi-cuenta.html">Mi cuenta</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="site-hero overlay hero-comida" style="background-image: url(https://cdn.colombia.com/sdi/2022/09/22/pagaria-por-las-sobras-de-comida-de-un-hotel-de-lujo-1068552.jpg);">
+      <div class="container">
+        <div class="row site-hero-inner justify-content-center align-items-center">
+          <div class="col-md-10 text-center">
+            <h1 class="heading" data-aos="fade-up">Restaurante</h1>
+            <p class="sub-heading mb-5" data-aos="fade-up" data-aos-delay="100">
+              Sabores auténticos en el corazón de Salta
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-light food-section">
+      <div class="container">
+        <!-- 1. El Mesón -->
+        <div class="food-half d-md-flex" data-aos="fade">
+          <div class="image">
+            <iframe width="100%" height="430"
+              src="https://www.youtube.com/embed/PvRcDxqWKxo"
+              title="El Mesón - Restaurante y Bar" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <div class="text">
+            <h2>El Mesón</h2>
+            <p>"El Mesón" es el lugar perfecto para disfrutar de una experiencia gastronómica distinta: su cocina conjuga sabores autóctonos con ingredientes selectos de la cocina internacional.</p>
+          </div>
+        </div>
+
+        <!-- 2. Desayunos y Meriendas -->
+        <div class="food-half d-md-flex order-lg" data-aos="fade">
+          <div class="text">
+            <h2>Desayunos y Meriendas</h2>
+            <p>Se destacan los desayunos y meriendas, cada producto de panadería es elaborado artesanalmente en el Hotel.</p>
+            <button class="btn btn-primary" onclick="togglePDF('restaurante')">Ver Carta</button>
+            <div id="pdf-restaurante" class="pdf-container"></div>
+          </div>
+          <div class="image" style="background-image: url('https://th.bing.com/th/id/R.2f317b35c814a7b4595e5da39036d9ef?rik=zcPnx29ABff6xA&riu=http%3a%2f%2fmilrecetas.net%2fwp-content%2fuploads%2f2015%2f11%2fRecetas-de-desayunos-2.jpg&ehk=eZItvDyr2PD2YgJrVmKYHeP5ZdpAutbOpmFela7HOSg%3d&risl=&pid=ImgRaw&r=0');"></div>
+        </div>
+
+        <!-- 3. Patio al Aire Libre -->
+        <div class="food-half d-md-flex" data-aos="fade">
+          <div class="image" style="background-image: url('../../../imgs/patio.png');"></div>
+          <div class="text">
+            <h2>Patio al Aire Libre</h2>
+            <p>Descubrí el nuevo patio, ideal para disfrutar de comidas al aire libre, un hermoso espacio de tranquilidad en pleno centro de la ciudad.</p>
+          </div>
+        </div>
+
+        <!-- 4. Cava de Vinos -->
+        <div class="food-half d-md-flex order-lg" data-aos="fade">
+          <div class="text">
+            <h2>Cava de Vinos</h2>
+            <p>La distinguida cava te invita a elegir tu vino entre una amplia selección de etiquetas exclusivas.</p>
+            <button class="btn btn-primary" onclick="togglePDF('vinos')">Ver Carta</button>
+            <div id="pdf-vinos" class="pdf-container"></div>
+          </div>
+          <div class="image" style="background-image: url('../../../imgs/vinos.png');"></div>
+        </div>
+
+        <!-- 5. Sala VIP -->
+        <div class="food-half d-md-flex" data-aos="fade">
+          <div class="image" style="background-image: url('../../../imgs/sala-vip.png');"></div>
+          <div class="text">
+            <h2>Sala VIP</h2>
+            <p>Disfrutá en la Sala VIP de un clima íntimo, reservado y especial para tus reuniones sociales o de trabajo.</p>
+          </div>
+        </div>
+
+        <!-- 6. Bar -->
+        <div class="food-half d-md-flex order-lg" data-aos="fade">
+          <div class="text">
+            <h2>Bar</h2>
+            <p>Descubrí en "El Mesón" un bar ideal para tu after office, y dejate sorprender con la variedad de tragos de autor especialmente preparados por el barman.</p>
+            <button class="btn btn-primary" onclick="togglePDF('bar')">Ver Carta</button>
+            <div id="pdf-bar" class="pdf-container"></div>
+          </div>
+          <div class="image" style="background-image: url('https://s.yimg.com/uu/api/res/1.2/NQ3K7gonMF8LpulKH.Czdw--~B/aD0yMDAwO3c9MzAwMDtzbT0xO2FwcGlkPXl0YWNoeW9u/http://media.zenfs.com/en-US/homerun/architectural_digest_422/568d4f8b073f8ff9ef65f87a01744818');"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="section footer-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Términos y Condiciones</a></li>
+              <li><a href="#">Política de Privacidad</a></li>
+              <li><a href="#">Ayuda</a></li>
+              <li><a href="#">Habitaciones</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Nuestra Ubicación</a></li>
+              <li><a href="#">Los Anfitriones</a></li>
+              <li><a href="#">Nosotros</a></li>
+              <li><a href="#">Contacto</a></li>
+              <li><a href="#">Restaurante</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5 pr-md-5 contact-info">
+            <p><span class="d-block">Dirección:</span> <span>Av. Belgrano 252, A4400 Salta, Argentina</span></p>
+            <p><span class="d-block">Teléfono:</span> <span>+54 387 431-1000</span></p>
+            <p><span class="d-block">Email:</span> <span>info@alejandroisalta.com</span></p>
+          </div>
+          <div class="col-md-3 mb-5">
+            <p>Suscríbete a nuestro Boletín</p>
+            <form action="#" class="footer-Boletín">
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Tu email...">
+                <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row bordertop pt-5">
+          <p class="col-md-6 text-left">
+            Hotel Alejandro I - Experiencias que perduran en el tiempo. | &copy;
+            <script>document.write(new Date().getFullYear());</script> Todos los derechos reservados
+          </p>
+          <p class="col-md-6 text-right social">
+            <a href="#"><span class="fa fa-tripadvisor"></span></a>
+            <a href="#"><span class="fa fa-facebook"></span></a>
+            <a href="#"><span class="fa fa-twitter"></span></a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../assets/villa/js/jquery-3.2.1.min.js"></script>
+    <script src="../assets/villa/js/popper.min.js"></script>
+    <script src="../assets/villa/js/bootstrap.min.js"></script>
+    <script src="../assets/villa/js/owl.carousel.min.js"></script>
+    <script src="../assets/villa/js/jquery.waypoints.min.js"></script>
+    <script src="../assets/villa/js/aos.js"></script>
+    <script src="../assets/villa/js/main.js"></script>
+    <script>
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+
+      // Mostrar / ocultar PDF
+      function togglePDF(tipo) {
+        const container = document.getElementById('pdf-' + tipo);
+
+        if (container.style.display === 'none' || container.style.display === '') {
+          container.style.display = 'block';
+          container.innerHTML = `
+            <iframe 
+              src="../docs/carta-${tipo}.pdf"
+            ></iframe>
+          `;
+        } else {
+          container.style.display = 'none';
+          container.innerHTML = '';
+        }
+      }
+    </script>
+  </body>
+</html>

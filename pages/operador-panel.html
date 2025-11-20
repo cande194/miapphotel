@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Panel de Operador · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Estilos base -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+
+  <style>
+    /* === Topbar igual al de Reservas === */
+    .topbar{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee}
+    .topbar .wrap{display:flex;align-items:center;gap:16px;padding:.75rem 1rem}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .brand .dot{color:#e61c5d}
+    .nav a{margin:0 .25rem;text-decoration:none;padding:.4rem .7rem;border-radius:.5rem;color:#1d1d1f;font-weight:600}
+    .nav a.active{background:rgba(230,28,93,.10);color:#e61c5d}
+    .spacer{flex:1}
+    .user{display:flex;align-items:center;gap:.5rem}
+    .badge-role{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem;background:#f2f2f3}
+    .logout{border:0;background:#e61c5d;color:#fff;border-radius:999px;padding:.45rem .9rem;font-weight:700}
+    .breadcrumb{border-bottom:1px solid #eee;background:#fafafa}
+    .breadcrumb span{display:inline-block;padding:.5rem 1rem}
+    .breadcrumb a{text-decoration:none}
+
+    /* === Contenido y tarjetas igual que Reservas === */
+    .card{
+      background:#fff;
+      border:1px solid #eee;
+      border-radius:12px;
+      padding:20px;
+      margin-top:1rem;
+      box-shadow:0 12px 30px rgba(15,15,15,.04);
+    }
+    .h1{font-size:2.5rem;font-weight:800;margin-bottom:.25rem}
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+    .btn-brand{
+      display:inline-block;
+      background:#e61c5d;
+      color:#fff;
+      font-weight:600;
+      border-radius:999px;
+      padding:.5rem 1.1rem;
+      border:0;
+      text-decoration:none;
+    }
+    .btn-brand:hover{background:#c81851;color:#fff}
+  </style>
+</head>
+
+<body data-page="dashboard">
+  <!-- ====== NAVBAR ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+      <nav class="nav" id="mainNav">
+        <a href="operador-panel.html" data-page="dashboard" class="active">Panel</a>
+        <a href="admin-reservas.html" data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-page="habitaciones">Habitaciones</a>
+        <a href="operador-mapa.html" data-page="mapa">Mapa</a>
+        <a href="operador-responder.html" data-page="mail">Responder mail</a>
+        <a href="admin-usuarios.html" data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html" data-page="tipos">Tipos de habitaciones</a>
+      </nav>
+      <div class="spacer"></div>
+      <div class="user">
+        <div id="userName">Operador</div>
+        <span id="userRoleBadge" class="badge-role">operador</span>
+        <button class="logout" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span>Panel</span>
+    <span>Inicio</span>
+  </div>
+
+  <!-- ====== CONTENIDO ====== -->
+  <section class="container py-4">
+    <h1 class="h1 mb-2 text-center">Panel de Operador</h1>
+    <p class="p-muted text-center">Gestión de reservas, estados y disponibilidad de habitaciones.</p>
+
+    <div class="row g-4 mt-2">
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <h5 class="card-title">Mapa de habitaciones</h5>
+          <p class="p-muted mb-3">Estado por piso. Abrir / Cerrar / Mant.</p>
+          <a class="btn-brand" href="operador-mapa.html">Abrir</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <h5 class="card-title">Reservas</h5>
+          <p class="p-muted mb-3">Consultar y liberar reservas.</p>
+          <a class="btn-brand" href="admin-reservas.html">Abrir</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <h5 class="card-title">Habitaciones</h5>
+          <p class="p-muted mb-3">Disponibilidad y tipos.</p>
+          <a class="btn-brand" href="admin-habitaciones.html">Abrir</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <h5 class="card-title">Responder mails</h5>
+          <p class="p-muted mb-3">Plantilla mailto con datos de la reserva.</p>
+          <a class="btn-brand" href="operador-responder.html">Abrir</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Seguridad básica: sólo operador (si es admin, lo mando a su panel)
+    (function seguridad(){
+      const t = localStorage.getItem('token');
+      const r = localStorage.getItem('userRole');
+      if (!t)           { location.href = 'ingresar-admin.html'; return; }
+      if (r === 'admin'){ location.href = 'admin-panel.html';    return; }
+      if (r !== 'operador'){ location.href = 'mi-cuenta.html';   return; }
+    })();
+
+    // Igual que en Reservas: ajustar menú y textos según rol
+    (function ajustarSegunRol() {
+      const role = localStorage.getItem('userRole');
+      const name = localStorage.getItem('userName') || 'Usuario';
+
+      const userName = document.getElementById('userName');
+      const badge = document.getElementById('userRoleBadge');
+      if (userName) userName.textContent = name;
+      if (badge) {
+        badge.textContent = role;
+        if (role === 'admin') {
+          badge.style.background = 'rgba(230,28,93,.12)';
+          badge.style.color = '#e61c5d';
+        }
+      }
+
+      // Ajustar links del menú según rol
+      const nav = document.getElementById('mainNav');
+      if (!nav) return;
+
+      const links = nav.querySelectorAll('a[data-page]');
+      links.forEach(a => {
+        const page = a.getAttribute('data-page');
+        switch (page) {
+          case 'dashboard':
+            a.href = role === 'admin' ? 'admin-panel.html' : 'operador-panel.html';
+            break;
+          case 'reservas':
+            a.href = 'admin-reservas.html';
+            break;
+          case 'habitaciones':
+            a.href = 'admin-habitaciones.html';
+            break;
+          case 'mapa':
+            a.href = 'operador-mapa.html';
+            if (role !== 'operador') a.style.display = 'none';
+            break;
+          case 'mail':
+            a.href = 'operador-responder.html';
+            if (role !== 'operador') a.style.display = 'none';
+            break;
+          case 'usuarios':
+            a.href = 'admin-usuarios.html';
+            if (role !== 'admin') a.style.display = 'none';
+            break;
+          case 'tipos':
+            a.href = 'admin-tipos.html';
+            if (role !== 'admin') a.style.display = 'none';
+            break;
+        }
+      });
+    })();
+
+    function logout(){
+      localStorage.clear();
+      location.href = 'mi-cuenta.html';
+    }
+  </script>
+</body>
+</html>

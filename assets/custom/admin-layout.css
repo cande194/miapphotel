@@ -1,0 +1,23 @@
+/* ===== Topbar ===== */
+.topbar{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee}
+.topbar .wrap{display:flex;align-items:center;gap:16px;padding:.75rem 1rem}
+.brand{font-weight:800;letter-spacing:.3px}
+.brand .dot{color:#e61c5d}
+
+/* Menú */
+.nav a{margin:0 .25rem;text-decoration:none;padding:.45rem .7rem;border-radius:.5rem;
+  color:#1d1d1f;font-weight:600;display:inline-flex;align-items:center;gap:.4rem}
+.nav a:hover{background:#f6f6f7}
+.nav a.active{background:rgba(230,28,93,.10);color:#e61c5d}
+.spacer{flex:1}
+
+/* Usuario / logout */
+.user{display:flex;align-items:center;gap:.5rem}
+.badge-role{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem;background:#f2f2f3}
+.logout{border:0;background:#e61c5d;color:#fff;border-radius:999px;padding:.45rem .9rem;font-weight:700}
+.logout:hover{opacity:.9}
+
+/* Breadcrumb opcional */
+.breadcrumb{border-bottom:1px solid #eee;background:#fafafa}
+.breadcrumb span{display:inline-block;padding:.5rem 1rem}
+.breadcrumb a{text-decoration:none}

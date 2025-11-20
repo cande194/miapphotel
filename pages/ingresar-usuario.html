@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingresar - Hotel Alejandro I</title>
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('../../../../imgs/fondo-mi-cuenta.jpg.jpg') no-repeat center center/cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1;
+    }
+    .login-box {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      max-width: 420px;
+      width: 100%;
+    }
+    .btn-full {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2 class="text-center mb-4">Ingresar como huésped</h2>
+    <form onsubmit="loginUser(event)">
+      <div class="mb-3">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="userEmail" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="userPassword" required>
+      </div>
+      <button type="submit" class="btn btn-outline-primary btn-full">Ingresar</button>
+    </form>
+    <div class="text-center mt-3">
+      <a href="mi-cuenta.html" class="text-muted">← Volver</a>
+    </div>
+  </div>
+
+  <script>
+    function loginUser(event) {
+      event.preventDefault();
+      const email = document.getElementById('userEmail').value;
+      const password = document.getElementById('userPassword').value;
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', 'user');
+      alert('¡Bienvenido, huésped!');
+      window.location.href = 'usuario-panel.html';
+    }
+  </script>
+</body>
+</html>

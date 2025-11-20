@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Elige tu tarifa - Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Fuentes / estilos del sitio -->
+  <link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400|Playfair+Display:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/animate.css">
+  <link rel="stylesheet" href="../assets/villa/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../assets/villa/css/aos.css">
+  <link rel="stylesheet" href="../assets/villa/fonts/ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="../assets/villa/fonts/fontawesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <link rel="stylesheet" href="../assets/custom/theme-royal.css"/>
+
+  <style>
+    body{
+      font-family:"Mukta Mahee","Poppins",sans-serif;
+      background-color:#f5f5f5;
+    }
+
+    /* Barra superior simple */
+    .top-bar{
+      background:#fff;
+      border-bottom:1px solid #e0e0e0;
+      padding:.75rem 0;
+    }
+
+    /* “Steps” (Paso 1 de 3, etc.) */
+    .steps-bar{
+      background:#f5f5f5;
+      border-bottom:1px solid #e0e0e0;
+      padding:.75rem 0;
+      font-size:.9rem;
+    }
+    .steps-bar span{
+      margin-right:1.5rem;
+    }
+    .steps-bar .step-active{
+      font-weight:600;
+      border-bottom:2px solid #8c7b6b;
+      padding-bottom:2px;
+    }
+
+    /* Layout principal */
+    .tarifa-main{
+      padding-top:1.5rem;
+      padding-bottom:3rem;
+    }
+    .card-tarifa{
+      background:#fff;
+      border-radius:4px;
+      border:1px solid #e0e0e0;
+      padding:1rem 1.25rem;
+      margin-bottom:1rem;
+    }
+    .card-tarifa.selected{
+      border-color:#8c7b6b;
+      box-shadow:0 0 0 2px rgba(140,123,107,.15);
+    }
+
+    .tarifa-precio{
+      font-weight:600;
+      font-size:1rem;
+    }
+    .tarifa-cond{
+      font-size:.85rem;
+      color:#555;
+      margin-bottom:.25rem;
+    }
+    .tarifa-link{
+      font-size:.8rem;
+    }
+
+    /* Resumen lateral */
+    .summary-card{
+      background:#fff;
+      border-radius:4px;
+      border:1px solid #e0e0e0;
+      padding:1.25rem 1.5rem;
+      font-size:.9rem;
+    }
+    .summary-title{
+      font-weight:600;
+      margin-bottom:.75rem;
+    }
+    .summary-hotel{
+      font-size:1rem;
+      font-weight:600;
+      margin-bottom:1rem;
+    }
+    .summary-section-title{
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#777;
+      margin-bottom:.2rem;
+    }
+    .summary-total-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:.75rem 0;
+      border-top:1px solid #e0e0e0;
+      border-bottom:1px solid #e0e0e0;
+      margin-top:.75rem;
+      margin-bottom:.75rem;
+    }
+    .summary-total-label{
+      font-weight:600;
+    }
+    .summary-total-amount{
+      font-weight:600;
+      font-size:1.05rem;
+    }
+    .summary-discount{
+      font-size:.8rem;
+      color:#2e7d32;
+      font-weight:600;
+      margin-top:.25rem;
+    }
+    .summary-extra{
+      font-size:.75rem;
+      color:#666;
+      margin-top:.5rem;
+    }
+
+    /* Steps (secciones) */
+    .tarifa-step{
+      display:none;
+    }
+    .tarifa-step.active{
+      display:block;
+    }
+
+    /* Botones abajo de cada paso */
+    .wizard-buttons{
+      margin-top:1.5rem;
+      display:flex;
+      justify-content:space-between;
+      gap:.75rem;
+    }
+
+    .btn-volver{
+      border-radius:0;
+      background:#f5f5f5;
+      border:1px solid #ccc;
+      color:#333;
+    }
+
+    .btn-contin{
+      border-radius:0;
+      background:#8c7b6b;
+      border:1px solid #8c7b6b;
+      color:#fff;
+      min-width:150px;
+    }
+    .btn-contin:hover{
+      background:#6f6054;
+      color:#fff;
+    }
+
+    /* Formularios de pasos 2 y 3 */
+    .form-label{
+      font-weight:500;
+    }
+
+    .alert-mini{
+      font-size:.85rem;
+      padding:.35rem .6rem;
+      margin-bottom:.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar simple -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Hotel Alejandro I</div>
+      <div style="font-size:.85rem;">Centro de reservas</div>
+    </div>
+  </div>
+
+  <!-- Barra de pasos -->
+  <div class="steps-bar">
+    <div class="container">
+      <span id="stepLabel1" class="step-active">Paso 1 de 3 · Elige la tarifa</span>
+      <span id="stepLabel2">Paso 2 de 3 · Completa tus datos</span>
+      <span id="stepLabel3">Paso 3 de 3 · Forma de pago</span>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="container tarifa-main">
+    <div class="row">
+      <!-- Columna izquierda: pasos -->
+      <div class="col-lg-7 mb-4">
+
+        <!-- MENSAJE ERRORES / INFO -->
+        <div id="msgGlobal"></div>
+
+        <!-- PASO 1: ELIGE LA TARIFA -->
+        <div id="paso1" class="tarifa-step active">
+          <h4 class="mb-3">Elige tarifa</h4>
+          <p style="font-size:.9rem;">Seleccioná la opción que mejor se adapte a tu viaje.</p>
+
+          <div id="tarifaNoReembolsable" class="card-tarifa">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="opTarifa" id="radioNoReemb" value="no_reembolsable" checked>
+                  <label class="form-check-label" for="radioNoReemb">
+                    Tarifa Prepago No Reembolsable
+                  </label>
+                </div>
+                <div class="tarifa-cond">Cancelación con gastos. Se paga ahora.</div>
+                <div class="tarifa-cond">Ideal para asegurar el mejor precio.</div>
+                <a href="#" class="tarifa-link">Ver condiciones</a>
+              </div>
+              <div class="text-end">
+                <div class="tarifa-precio" id="precioNoReemb"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tarifaFlexible" class="card-tarifa">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="opTarifa" id="radioFlex" value="flexible">
+                  <label class="form-check-label" for="radioFlex">
+                    Tarifa Flexible
+                  </label>
+                </div>
+                <div class="tarifa-cond">Cancelación gratuita hasta una fecha límite.</div>
+                <div class="tarifa-cond">Pagás en el hotel.</div>
+                <a href="#" class="tarifa-link">Ver condiciones</a>
+              </div>
+              <div class="text-end">
+                <div class="tarifa-precio" id="precioFlex"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-buttons">
+            <button type="button" class="btn btn-volver" onclick="volverAReserva()">Volver</button>
+            <button type="button" class="btn btn-contin" onclick="irAPaso2()">Continuar</button>
+          </div>
+        </div>
+
+        <!-- PASO 2: DATOS DEL HUESPED -->
+        <div id="paso2" class="tarifa-step">
+          <h4 class="mb-3">Completa tus datos</h4>
+          <div id="msgPaso2"></div>
+
+          <div class="alert alert-info alert-mini">
+            Enhorabuena, has conseguido el mejor precio para este tipo de habitación.
+          </div>
+
+          <form id="formDatos">
+            <div class="mb-3">
+              <label class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nacionalidad</label>
+              <select class="form-select" id="nacionalidad">
+                <option value="ARGENTINA" selected>ARGENTINA</option>
+                <option value="CHILE">CHILE</option>
+                <option value="URUGUAY">URUGUAY</option>
+                <option value="PARAGUAY">PARAGUAY</option>
+                <option value="BOLIVIA">BOLIVIA</option>
+                <option value="OTRO">OTRO</option>
+              </select>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Primer apellido</label>
+                <input type="text" class="form-control" id="apellido" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Número de teléfono</label>
+              <div class="row">
+                <div class="col-4 col-md-3 mb-2 mb-md-0">
+                  <select class="form-select" id="prefijoTel">
+                    <option value="+54" selected>+54</option>
+                    <option value="+56">+56</option>
+                    <option value="+598">+598</option>
+                    <option value="+595">+595</option>
+                    <option value="+591">+591</option>
+                  </select>
+                </div>
+                <div class="col-8 col-md-9">
+                  <input type="tel" class="form-control" id="telefono" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-check mb-2" style="font-size:.85rem;">
+              <input class="form-check-input" type="checkbox" id="comentarioCheck">
+              <label class="form-check-label" for="comentarioCheck">
+                Quiero hacer un comentario o petición (sujeto a disponibilidad).
+              </label>
+            </div>
+
+            <div class="form-check mb-2" style="font-size:.8rem;">
+              <input class="form-check-input" type="checkbox" id="fidelidadCheck">
+              <label class="form-check-label" for="fidelidadCheck">
+                Deseo formar parte del programa de fidelidad del hotel y recibir información comercial.
+              </label>
+            </div>
+
+            <div class="form-check mb-3" style="font-size:.8rem;">
+              <input class="form-check-input" type="checkbox" id="condicionesCheck" required>
+              <label class="form-check-label" for="condicionesCheck">
+                He leído y acepto las condiciones generales de contratación y el tratamiento de mis datos.
+              </label>
+            </div>
+          </form>
+
+          <div class="wizard-buttons">
+            <button type="button" class="btn btn-volver" onclick="irAPaso1()">Volver</button>
+            <button type="button" class="btn btn-contin" onclick="irAPaso3()">Continuar</button>
+          </div>
+        </div>
+
+        <!-- PASO 3: PAGO -->
+        <div id="paso3" class="tarifa-step">
+          <h4 class="mb-3">Forma de pago</h4>
+          <div id="msgPaso3"></div>
+
+          <div class="alert alert-info alert-mini">
+            Tus datos de pago se procesarán de forma segura.
+          </div>
+
+          <form id="formPago">
+            <div class="card-tarifa mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="opPago" id="pagoTarjeta" checked>
+                <label class="form-check-label" for="pagoTarjeta">
+                  Tarjeta de crédito / débito
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre en la tarjeta</label>
+              <input type="text" class="form-control" id="nombreTarjeta" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Número de tarjeta</label>
+              <input type="text" class="form-control" id="numeroTarjeta" placeholder="9999 9999 9999 9999" required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Vencimiento</label>
+                <input type="text" class="form-control" id="vencimientoTarjeta" placeholder="MM/AA" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">CVV</label>
+                <input type="password" class="form-control" id="cvvTarjeta" maxlength="4" required>
+              </div>
+            </div>
+          </form>
+
+          <div class="wizard-buttons">
+            <button type="button" class="btn btn-volver" onclick="irAPaso2()">Volver</button>
+            <button type="button" class="btn btn-contin" onclick="confirmarReserva()">Confirmar reserva</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: RESUMEN -->
+      <div class="col-lg-5">
+        <div class="summary-card" id="summaryCard">
+          <div class="summary-hotel">Hotel Alejandro I Affiliated by Meliá</div>
+
+          <div class="row">
+            <div class="col-6 mb-2">
+              <div class="summary-section-title">Entrada</div>
+              <div id="sumEntradaFecha"></div>
+              <div style="font-size:.75rem;" id="sumEntradaHora">A partir de las 15:00</div>
+            </div>
+            <div class="col-6 mb-2">
+              <div class="summary-section-title">Salida</div>
+              <div id="sumSalidaFecha"></div>
+              <div style="font-size:.75rem;" id="sumSalidaHora">Hasta las 12:00</div>
+            </div>
+          </div>
+
+          <div style="font-size:.8rem; margin-top:.25rem;" id="sumNoches"></div>
+
+          <hr>
+
+          <div>
+            <div class="summary-section-title">Habitación</div>
+            <div id="sumNombreHab" style="font-weight:600;"></div>
+            <div style="font-size:.8rem;" id="sumDetallesHab"></div>
+          </div>
+
+          <div class="summary-discount" id="sumDescuento">
+            15% DESCUENTO HUÉSPED FRECUENTE (ejemplo)
+          </div>
+
+          <div class="summary-total-line">
+            <div>
+              <div class="summary-total-label">Importe total</div>
+              <div style="font-size:.75rem;" id="sumImpuestos">Impuestos y tasas no incluidos</div>
+            </div>
+            <div class="summary-total-amount" id="sumImporteTotal"></div>
+          </div>
+
+          <div style="font-size:.85rem;">
+            <strong id="sumTipoTarifa">Tarifa seleccionada</strong><br>
+            <span id="sumPoliticaTarifa" style="font-size:.8rem;">
+              Se mostrará aquí la política de cancelación según la tarifa elegida.
+            </span>
+          </div>
+
+          <div class="summary-extra">
+            Información adicional de la reserva: se aplicará el IVA según la legislación vigente. El hotel podrá solicitar
+            una tarjeta de crédito como garantía.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="../assets/villa/js/jquery-3.2.1.min.js"></script>
+  <script src="../assets/villa/js/popper.min.js"></script>
+  <script src="../assets/villa/js/bootstrap.min.js"></script>
+  <script src="../assets/villa/js/owl.carousel.min.js"></script>
+  <script src="../assets/villa/js/jquery.waypoints.min.js"></script>
+  <script src="../assets/villa/js/aos.js"></script>
+  <script src="../assets/villa/js/main.js"></script>
+
+  <script>
+    /* ================================
+       Utilidades de moneda / formato
+       ================================ */
+
+    // Tasas de ejemplo (mismo criterio que en reservar)
+    const CAMBIO = {
+      ARS: 1,
+      USD: 1100,
+      EUR: 1200,
+      MXN: 60,
+      BRL: 220,
+      CLP: 1.2,
+      UYU: 30,
+      PYG: 0.13,
+      AUD: 700,
+      CAD: 800,
+      JPY: 7
+    };
+
+    function convertirDesdeARS(montoARS, divisa){
+      const tasa = CAMBIO[divisa] || 1;
+      return montoARS / tasa;
+    }
+
+    function formatearMoneda(monto, divisa){
+      let locale = 'es-AR';
+      if(divisa === 'USD') locale = 'en-US';
+      if(divisa === 'EUR') locale = 'es-ES';
+      if(divisa === 'MXN') locale = 'es-MX';
+      if(divisa === 'BRL') locale = 'pt-BR';
+      if(divisa === 'CLP') locale = 'es-CL';
+      if(divisa === 'UYU') locale = 'es-UY';
+      if(divisa === 'PYG') locale = 'es-PY';
+      if(divisa === 'AUD') locale = 'en-AU';
+      if(divisa === 'CAD') locale = 'en-CA';
+      if(divisa === 'JPY') locale = 'ja-JP';
+
+      return new Intl.NumberFormat(locale, {
+        style:'currency',
+        currency: divisa
+      }).format(monto);
+    }
+
+    function formatearFechaLarga(fechaISO){
+      if(!fechaISO) return '';
+      const d = new Date(fechaISO);
+      return d.toLocaleDateString('es-AR', {
+        weekday:'short',
+        day:'numeric',
+        month:'long',
+        year:'numeric'
+      });
+    }
+
+    /* =================================
+       Carga de datos de la reserva
+       ================================= */
+
+    let reserva = null;
+    let divisaActual = 'ARS';
+    let totalBaseDivisa = 0;      // total "base" en la divisa elegida
+    let totalNoReemb = 0;
+    let totalFlex = 0;
+
+    // intentar leer del localStorage; si no, usar demo
+    function cargarReservaDesdeStorage(){
+      const dato = localStorage.getItem('reservaSeleccionada');
+      if(dato){
+        try{
+          reserva = JSON.parse(dato);
+        }catch(e){
+          console.error('Error parseando reservaSeleccionada:', e);
+        }
+      }
+
+      if(!reserva){
+        // Demo de ejemplo si aún no se guarda nada desde reservar.html
+        reserva = {
+          checkin: '2025-12-02',
+          checkout:'2025-12-18',
+          noches: 16,
+          habitacionNombre:'Estándar con Vista',
+          precioNocheARS: 185000,
+          divisa:'USD',
+          adultos:2,
+          ninios:0
+        };
+      }
+      divisaActual = reserva.divisa || 'ARS';
+
+      const precioNocheDivisa = convertirDesdeARS(reserva.precioNocheARS, divisaActual);
+      totalBaseDivisa = precioNocheDivisa * (reserva.noches || 1);
+
+      // calculamos dos opciones de tarifa:
+      // no reembolsable más barata, flexible un poco más cara
+      totalNoReemb = totalBaseDivisa * 0.8;   // 20% más barata
+      totalFlex    = totalBaseDivisa * 1.0;   // base
+    }
+
+    function actualizarResumen(tarifaSeleccionada){
+      const checkin = reserva.checkin;
+      const checkout = reserva.checkout;
+
+      document.getElementById('sumEntradaFecha').textContent = formatearFechaLarga(checkin);
+      document.getElementById('sumSalidaFecha').textContent  = formatearFechaLarga(checkout);
+
+      const noches = reserva.noches || 1;
+      document.getElementById('sumNoches').textContent =
+        noches + ' noche' + (noches>1 ? 's' : '');
+
+      document.getElementById('sumNombreHab').textContent = reserva.habitacionNombre || 'Habitación seleccionada';
+      document.getElementById('sumDetallesHab').textContent =
+        (reserva.adultos || 2) + ' adultos' + (reserva.ninios ? ' · ' + reserva.ninios + ' niños' : '');
+
+      let totalMostrar = (tarifaSeleccionada === 'flexible') ? totalFlex : totalNoReemb;
+      document.getElementById('sumImporteTotal').textContent =
+        formatearMoneda(totalMostrar, divisaActual);
+
+      const sumTipoTarifa = document.getElementById('sumTipoTarifa');
+      const sumPolitica   = document.getElementById('sumPoliticaTarifa');
+
+      if(tarifaSeleccionada === 'flexible'){
+        sumTipoTarifa.textContent = 'Tarifa Flexible';
+        sumPolitica.textContent   = 'Cancelación gratuita hasta una fecha límite. Pagarás en el hotel.';
+      }else{
+        sumTipoTarifa.textContent = 'Tarifa Prepago No Reembolsable';
+        sumPolitica.textContent   = 'Se cobra de forma anticipada. No permite cambios ni cancelación sin gastos.';
+      }
+    }
+
+    function actualizarPreciosTarifas(){
+      document.getElementById('precioNoReemb').textContent =
+        formatearMoneda(totalNoReemb, divisaActual);
+      document.getElementById('precioFlex').textContent =
+        formatearMoneda(totalFlex, divisaActual);
+    }
+
+    /* ================================
+       Navegación entre pasos
+       ================================ */
+
+    function setPasoActivo(n){
+      // secciones
+      ['paso1','paso2','paso3'].forEach((id,idx)=>{
+        const el = document.getElementById(id);
+        if(el) el.classList.toggle('active', (idx+1)===n);
+      });
+      // labels de steps
+      document.getElementById('stepLabel1').classList.toggle('step-active', n===1);
+      document.getElementById('stepLabel2').classList.toggle('step-active', n===2);
+      document.getElementById('stepLabel3').classList.toggle('step-active', n===3);
+    }
+
+    function irAPaso1(){
+      setPasoActivo(1);
+    }
+
+    function irAPaso2(){
+      const msg = document.getElementById('msgGlobal');
+      msg.innerHTML = '';
+
+      const seleccion = document.querySelector('input[name="opTarifa"]:checked');
+      if(!seleccion){
+        msg.innerHTML = '<div class="alert alert-warning alert-mini">Seleccioná una tarifa para continuar.</div>';
+        return;
+      }
+      // marcar visualmente la tarjeta
+      document.getElementById('tarifaNoReembolsable').classList.toggle(
+        'selected', seleccion.value === 'no_reembolsable'
+      );
+      document.getElementById('tarifaFlexible').classList.toggle(
+        'selected', seleccion.value === 'flexible'
+      );
+
+      actualizarResumen(seleccion.value);
+      setPasoActivo(2);
+    }
+
+    function irAPaso3(){
+      const msg2 = document.getElementById('msgPaso2');
+      msg2.innerHTML = '';
+
+      // validación muy básica
+      const email = document.getElementById('email').value.trim();
+      const nombre = document.getElementById('nombre').value.trim();
+      const apellido = document.getElementById('apellido').value.trim();
+      const tel = document.getElementById('telefono').value.trim();
+      const cond = document.getElementById('condicionesCheck').checked;
+
+      if(!email || !nombre || !apellido || !tel || !cond){
+        msg2.innerHTML = '<div class="alert alert-warning alert-mini">Completá los campos obligatorios y acepta las condiciones.</div>';
+        return;
+      }
+
+      setPasoActivo(3);
+    }
+
+    function confirmarReserva(){
+      const msg3 = document.getElementById('msgPaso3');
+      msg3.innerHTML = '';
+
+      const nombreTar = document.getElementById('nombreTarjeta').value.trim();
+      const numTar = document.getElementById('numeroTarjeta').value.trim();
+      const venc = document.getElementById('vencimientoTarjeta').value.trim();
+      const cvv = document.getElementById('cvvTarjeta').value.trim();
+
+      if(!nombreTar || !numTar || !venc || !cvv){
+        msg3.innerHTML = '<div class="alert alert-warning alert-mini">Completá todos los datos de la tarjeta.</div>';
+        return;
+      }
+
+      // Acá en un sistema real se enviaría la reserva al servidor.
+      alert('¡Reserva confirmada! El pago se realizo con exito. Gracias por elegirnos.');
+      // Podés redirigir a una página de confirmación
+      // window.location.href = 'confirmacion.html';
+    }
+
+    function volverAReserva(){
+      // si querés volver al buscador principal
+      window.location.href = 'reservar.html';
+    }
+
+    /* ================================
+       Init
+       ================================ */
+
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarReservaDesdeStorage();
+      actualizarPreciosTarifas();
+      actualizarResumen('no_reembolsable'); // por defecto
+      // resaltar tarjeta por defecto
+      document.getElementById('tarifaNoReembolsable').classList.add('selected');
+    });
+  </script>
+</body>
+</html>

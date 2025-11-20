@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Responder mail · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- MISMOS ESTILOS QUE RESERVAS -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+
+  <style>
+    /* === Topbar igual al panel / reservas === */
+    .topbar{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee}
+    .topbar .wrap{display:flex;align-items:center;gap:16px;padding:.75rem 1rem}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .brand .dot{color:#e61c5d}
+    .nav a{margin:0 .25rem;text-decoration:none;padding:.4rem .7rem;border-radius:.5rem;color:#1d1d1f;font-weight:600}
+    .nav a.active{background:rgba(230,28,93,.10);color:#e61c5d}
+    .spacer{flex:1}
+    .user{display:flex;align-items:center;gap:.5rem}
+    .badge-role{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem;background:#f2f2f3}
+    .logout{border:0;background:#e61c5d;color:#fff;border-radius:999px;padding:.45rem .9rem;font-weight:700}
+    .breadcrumb{border-bottom:1px solid #eee;background:#fafafa}
+    .breadcrumb span{display:inline-block;padding:.5rem 1rem}
+    .breadcrumb a{text-decoration:none}
+
+    /* === Ajustes de contenido IGUALES A RESERVAS === */
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:20px;margin-top:1rem}
+    .h1{font-size:2.5rem;font-weight:800;margin-bottom:.25rem;color:#6b7278}
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+    .btn-ghost{border:1px solid #ddd;background:transparent;border-radius:999px;padding:.45rem 1rem;font-weight:500}
+
+    /* === Estilos específicos de correos (igual que tenías) === */
+    .email-list {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-bottom:25px;
+    }
+
+    .email-card {
+      padding:14px 18px;
+      border-radius:14px;
+      border:1px solid #ececec;
+      background:#ffffff;
+      box-shadow:0 4px 10px rgba(0,0,0,0.03);
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .email-card:hover {
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+      border-color:#ffb3c6;
+      background:#fff7fa;
+    }
+
+    .email-header {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:6px;
+      font-size:14px;
+    }
+
+    .email-from {font-weight:600;color:#222;}
+    .email-date {color:#999;font-size:12px;white-space:nowrap;}
+
+    .email-subject {
+      font-weight:600;
+      margin-bottom:6px;
+      color:#ff6584;
+    }
+
+    .email-preview {
+      font-size:14px;
+      color:#444;
+      max-height:110px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .email-actions {
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+    }
+
+    .btn-mail {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 16px;
+      border-radius:999px;
+      border:none;
+      background:#ff6584;
+      color:#fff;
+      font-size:14px;
+      cursor:pointer;
+      gap:6px;
+      transition:background .15s ease, transform .1s ease, box-shadow .1s ease;
+      box-shadow:0 4px 10px rgba(255,101,132,0.35);
+    }
+    .btn-mail:hover {
+      background:#ff4b70;
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(255,101,132,0.45);
+    }
+    .btn-mail:active {
+      transform:translateY(0);
+      box-shadow:0 3px 8px rgba(255,101,132,0.30);
+    }
+    .btn-mail.secondary {
+      background:#f3f3f3;
+      color:#444;
+      box-shadow:none;
+    }
+    .btn-mail.secondary:hover {background:#e7e7e7;}
+    .btn-mail.danger {
+      background:#ffd5dd;
+      color:#b30024;
+      box-shadow:none;
+    }
+    .btn-mail.danger:hover {background:#ffb0c0;}
+
+    .reply-box {
+      margin-top:10px;
+      padding:18px 20px 20px;
+      border-radius:16px;
+      background:#ffffff;
+      border:1px solid #f0d2dd;
+      box-shadow:0 6px 18px rgba(0,0,0,0.04);
+    }
+
+    .reply-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .reply-row label {
+      font-size:14px;
+      color:#444;
+      min-width:60px;
+    }
+
+    .reply-row input {
+      flex:1;
+      min-width:250px;
+    }
+
+    .reply-box textarea {
+      width:100%;
+      border-radius:10px;
+      border:1px solid #ddd;
+      padding:8px 10px;
+      font-family:inherit;
+      resize:vertical;
+    }
+
+    .reply-box input {
+      border-radius:999px;
+      border:1px solid #ddd;
+      padding:6px 10px;
+      font-family:inherit;
+      height:34px;
+    }
+
+    .reply-box input:focus,
+    .reply-box textarea:focus {
+      outline:none;
+      border-color:#ff6584;
+      box-shadow:0 0 0 2px rgba(255,101,132,0.20);
+    }
+
+    .reply-actions {
+      display:flex;
+      justify-content:flex-end;
+      margin-top:10px;
+      gap:8px;
+    }
+
+    @media (max-width: 768px) {
+      .email-header {flex-direction:column;align-items:flex-start;}
+      .reply-row {flex-direction:column;align-items:stretch;}
+      .reply-row label {margin-bottom:-4px;}
+    }
+  </style>
+</head>
+
+<body data-page="mail">
+  <!-- ====== NAVBAR (IGUAL A RESERVAS) ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+
+      <nav class="nav" id="mainNav">
+        <a href="operador-panel.html" data-page="dashboard">Panel</a>
+        <a href="admin-reservas.html" data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-page="habitaciones">Habitaciones</a>
+        <a href="operador-mapa.html" data-page="mapa">Mapa</a>
+        <a href="operador-responder.html" data-page="mail" class="active">Responder mail</a>
+        <a href="admin-usuarios.html" data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html" data-page="tipos">Tipos</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div id="userName">Operador</div>
+        <span id="userRoleBadge" class="badge-role">operador</span>
+        <button class="logout" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb igual -->
+  <div class="breadcrumb">
+    <span><a href="operador-panel.html">Panel</a></span>
+    <span>Responder mail</span>
+  </div>
+
+  <!-- ====== CONTENIDO (MISMO LAYOUT QUE RESERVAS) ====== -->
+  <section class="container py-4">
+    <h1 class="h1 mb-2">Correos recibidos</h1>
+    <p class="p-muted">Mensajes enviados desde el formulario web y otras consultas por email.</p>
+
+    <div class="card">
+      <!-- LISTA DE CORREOS -->
+      <section id="listaEmails" class="email-list">
+        <!-- Se llena por JS -->
+      </section>
+
+      <!-- CAJA DE RESPUESTA -->
+      <section id="respuesta" class="reply-box" style="display:none;">
+        <h4>Responder correo</h4>
+
+        <div class="reply-row">
+          <label for="emailTo">Para:</label>
+          <input id="emailTo" type="email" placeholder="correo-del-cliente@ejemplo.com">
+        </div>
+
+        <div class="reply-row">
+          <label for="emailSubject">Asunto:</label>
+          <input id="emailSubject" type="text" placeholder="Re: Consulta de reserva">
+        </div>
+
+        <label for="emailMessage" style="font-size:14px;color:#444;">Mensaje:</label>
+        <textarea id="emailMessage" rows="5" placeholder="Escribí aquí la respuesta para el cliente..."></textarea>
+
+        <div class="reply-actions">
+          <button class="btn-mail secondary" type="button" onclick="cancelarRespuesta()">Cancelar</button>
+          <button class="btn-mail" type="button" onclick="enviarRespuesta()">Enviar</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ====== AJUSTES SEGÚN ROL (MISMO SCRIPT QUE RESERVAS) ====== -->
+  <script>
+  (function ajustarSegunRol() {
+    const role = localStorage.getItem('userRole');
+    const name = localStorage.getItem('userName') || 'Usuario';
+
+    const userName = document.getElementById('userName');
+    const badge = document.getElementById('userRoleBadge');
+    if (userName) userName.textContent = name;
+    if (badge) {
+      badge.textContent = role;
+      if (role === 'admin') {
+        badge.style.background = 'rgba(230,28,93,.12)';
+        badge.style.color = '#e61c5d';
+      }
+    }
+
+    const nav = document.getElementById('mainNav');
+    if (!nav) return;
+
+    const links = nav.querySelectorAll('a[data-page]');
+    links.forEach(a => {
+      const page = a.getAttribute('data-page');
+      switch (page) {
+        case 'dashboard':
+          a.href = role === 'admin' ? 'admin-panel.html' : 'operador-panel.html';
+          break;
+        case 'reservas':
+          a.href = 'admin-reservas.html';
+          break;
+        case 'habitaciones':
+          a.href = 'admin-habitaciones.html';
+          break;
+        case 'mapa':
+          a.href = 'operador-mapa.html';
+          if (role !== 'operador') a.style.display = 'none';
+          break;
+        case 'mail':
+          a.href = 'operador-responder.html';
+          if (role !== 'operador') a.style.display = 'none';
+          break;
+        case 'usuarios':
+          a.href = 'admin-usuarios.html';
+          if (role !== 'admin') a.style.display = 'none';
+          break;
+        case 'tipos':
+          a.href = 'admin-tipos.html';
+          if (role !== 'admin') a.style.display = 'none';
+          break;
+      }
+    });
+
+    const page = document.body.dataset.page || '';
+    nav.querySelectorAll('a[data-page]').forEach(a => {
+      if (a.dataset.page === page) a.classList.add('active');
+    });
+  })();
+
+  function logout(){
+    localStorage.clear();
+    location.href='mi-cuenta.html';
+  }
+  </script>
+
+  <!-- ====== LÓGICA DE CORREOS (TU JS ORIGINAL) ====== -->
+  <script>
+    const API = "http://localhost:4000/api/mail";
+
+    function extraerEmail(fromHeader) {
+      if (!fromHeader) return "";
+      const match = fromHeader.match(/<([^>]+)>/);
+      return match ? match[1] : fromHeader;
+    }
+
+    function htmlAtexto(html) {
+      if (!html) return "";
+      return html
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/p>/gi, "\n")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function extraerCamposFormulario(texto) {
+      const buscar = (regex) => {
+        const m = texto.match(regex);
+        return m ? m[1].trim() : "";
+      };
+
+      const nombre = buscar(/(?:Nombre|Name)\s*:?\s*([^:]+?)(?=(Tel[eé]fono|Phone|Email|Mensaje|Message|$))/i);
+      const telefono = buscar(/(?:Tel[eé]fono|Phone)\s*:?\s*([^:]+?)(?=(Email|Mensaje|Message|Nombre|Name|$))/i);
+      const email = buscar(/Email\s*:?\s*([^\s]+@[^\s]+)/i);
+      const mensaje = buscar(/(?:Mensaje|Message)\s*:?\s*(.+)$/i);
+
+      return { nombre, telefono, email, mensaje };
+    }
+
+    async function cargarEmails() {
+      const cont = document.getElementById("listaEmails");
+      cont.innerHTML = '<p class="p-muted">Cargando correos...</p>';
+
+      try {
+        const res = await fetch(`${API}/leer`);
+        const data = await res.json();
+
+        if (!data.ok) {
+          cont.innerHTML = '<p class="p-muted">No se pudieron cargar los correos.</p>';
+          return;
+        }
+
+        cont.innerHTML = "";
+        if (!data.mensajes || data.mensajes.length === 0) {
+          cont.innerHTML = '<p class="p-muted">Por ahora no hay correos nuevos.</p>';
+          return;
+        }
+
+        for (const item of data.mensajes) {
+          const id = item.id;
+
+          const resMsg = await fetch(`${API}/mensaje/${id}`);
+          const mensaje = await resMsg.json();
+          if (!mensaje.ok) continue;
+
+          const card = document.createElement("article");
+          card.className = "email-card";
+
+          const cuerpoTexto = htmlAtexto(mensaje.cuerpo || "");
+
+          const esFormulario =
+            /Nuevo mensaje desde la web del Hotel/i.test(cuerpoTexto) ||
+            /A new form has been submitted on your website/i.test(cuerpoTexto);
+
+          let contenidoHTML = "";
+          let correoParaResponder = "";
+          let asuntoRespuesta = "";
+
+          if (esFormulario) {
+            const campos = extraerCamposFormulario(cuerpoTexto);
+
+            correoParaResponder = campos.email || "";
+            asuntoRespuesta = "Respuesta a tu consulta al Hotel Alejandro I";
+
+            contenidoHTML = `
+              <div class="email-header">
+                <span class="email-from">Formulario de contacto web</span>
+                <span class="email-date">${mensaje.fecha || ""}</span>
+              </div>
+              <div class="email-subject">Nuevo mensaje desde la web</div>
+              <div class="email-preview">
+                <b>Nombre:</b> ${campos.nombre || "-"}<br>
+                <b>Teléfono:</b> ${campos.telefono || "-"}<br>
+                <b>Email:</b> ${campos.email || "-"}<br>
+                <b>Mensaje:</b> ${campos.mensaje || "-"}
+              </div>
+            `;
+          } else {
+            const preview =
+              cuerpoTexto.length > 180
+                ? cuerpoTexto.substring(0, 180) + "..."
+                : cuerpoTexto || "(Mensaje vacío)";
+
+            correoParaResponder = extraerEmail(mensaje.de);
+            asuntoRespuesta = mensaje.asunto
+              ? `Re: ${mensaje.asunto}`
+              : "Respuesta del Hotel Alejandro I";
+
+            contenidoHTML = `
+              <div class="email-header">
+                <span class="email-from">${mensaje.de || "Sin remitente"}</span>
+                <span class="email-date">${mensaje.fecha || ""}</span>
+              </div>
+              <div class="email-subject">${mensaje.asunto || "(Sin asunto)"}</div>
+              <div class="email-preview">${preview}</div>
+            `;
+          }
+
+          card.innerHTML = `
+            ${contenidoHTML}
+            <div class="email-actions">
+              <button class="btn-mail btn-reply" type="button">Responder</button>
+              <button class="btn-mail danger btn-delete" type="button">Borrar</button>
+            </div>
+          `;
+
+          const btnReply = card.querySelector(".btn-reply");
+          btnReply.addEventListener("click", () => {
+            const box = document.getElementById("respuesta");
+            box.style.display = "block";
+
+            document.getElementById("emailTo").value = correoParaResponder;
+            document.getElementById("emailSubject").value = asuntoRespuesta;
+            document.getElementById("emailMessage").value = "";
+            document.getElementById("emailMessage").focus();
+
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth"
+            });
+          });
+
+          const btnDelete = card.querySelector(".btn-delete");
+          btnDelete.addEventListener("click", async () => {
+            if (!confirm("¿Seguro que querés eliminar este correo?")) return;
+
+            try {
+              const resDel = await fetch(`${API}/borrar/${id}`, {
+                method: "DELETE"
+              });
+              const r = await resDel.json();
+              if (r.ok) {
+                card.remove();
+              } else {
+                alert("No se pudo borrar el correo.");
+              }
+            } catch (err) {
+              console.error("Error borrando correo:", err);
+              alert("Ocurrió un error al borrar el correo.");
+            }
+          });
+
+          cont.appendChild(card);
+        }
+      } catch (err) {
+        console.error("Error cargando correos:", err);
+        cont.innerHTML = '<p class="p-muted">Ocurrió un error al cargar los correos.</p>';
+      }
+    }
+
+    async function enviarRespuesta() {
+      const to = document.getElementById("emailTo").value.trim();
+      const subject = document.getElementById("emailSubject").value.trim();
+      const message = document.getElementById("emailMessage").value.trim();
+
+      if (!to || !subject || !message) {
+        alert("Completá correo, asunto y mensaje antes de enviar.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/responder`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ to, subject, message })
+        });
+
+        const data = await res.json();
+        if (data.ok) {
+          alert("Correo enviado correctamente ✅");
+          document.getElementById("respuesta").style.display = "none";
+        } else {
+          alert("Error al enviar el correo ❌");
+        }
+      } catch (err) {
+        console.error("Error al enviar correo:", err);
+        alert("Ocurrió un error al enviar el correo.");
+      }
+    }
+
+    function cancelarRespuesta() {
+      document.getElementById("respuesta").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", cargarEmails);
+  </script>
+</body>
+</html>

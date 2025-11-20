@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Mapa de habitaciones · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- MISMOS ESTILOS QUE RESERVAS -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+
+  <style>
+    /* === Topbar igual al panel / reservas === */
+    .topbar{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee}
+    .topbar .wrap{display:flex;align-items:center;gap:16px;padding:.75rem 1rem}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .brand .dot{color:#e61c5d}
+    .nav a{margin:0 .25rem;text-decoration:none;padding:.4rem .7rem;border-radius:.5rem;color:#1d1d1f;font-weight:600}
+    .nav a.active{background:rgba(230,28,93,.10);color:#e61c5d}
+    .spacer{flex:1}
+    .user{display:flex;align-items:center;gap:.5rem}
+    .badge-role{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem;background:#f2f2f3}
+    .logout{border:0;background:#e61c5d;color:#fff;border-radius:999px;padding:.45rem .9rem;font-weight:700}
+    .breadcrumb{border-bottom:1px solid #eee;background:#fafafa}
+    .breadcrumb span{display:inline-block;padding:.5rem 1rem}
+    .breadcrumb a{text-decoration:none}
+
+    /* === Contenido igual estilo a reservas === */
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:20px;margin-top:1rem}
+    .h1{font-size:2.5rem;font-weight:800;margin-bottom:.25rem}
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+
+    /* === Específico del mapa === */
+    .legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .state-dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
+
+    .map-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:16px;
+    }
+
+    .room-card{
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:14px 16px;
+      border:1px solid #e7e7ea;
+      border-radius:14px;
+      background:#fff;
+      min-height:140px;
+      box-sizing:border-box;
+    }
+
+    .room-card.is-free  { background:#f3fffa; }
+    .room-card.is-busy  { background:#fff5f6; }
+    .room-card.is-maint { background:#fffaf0; }
+
+    .room-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:4px;
+    }
+    .room-title{
+      font-weight:700;
+      font-size:18px;
+      margin:0;
+      white-space:nowrap;
+    }
+
+    .badge-state{
+      font-size:12px;
+      padding:3px 8px;
+      border-radius:999px;
+      background:#eef1f5;
+      color:#555;
+    }
+    .badge-state.free  { background:#d3f7e8; color:#116c4d; }
+    .badge-state.busy  { background:#ffd7dd; color:#9b1730; }
+    .badge-state.maint { background:#fee8b8; color:#8a5b00; }
+
+    .room-type{
+      color:#6b7280;
+      font-size:13px;
+      margin-top:2px;
+    }
+    .room-last{
+      color:#9ca3af;
+      font-size:12px;
+      margin-top:4px;
+    }
+
+    .room-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+    }
+    .room-actions .btn{
+      flex:1 1 100px;
+      white-space:nowrap;
+      height:36px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:10px;
+      border:1px solid #ddd;
+      background:#fff;
+      font-weight:500;
+    }
+    .room-actions .btn:hover{background:#fafafa}
+
+    @media (max-width:420px){
+      .room-actions .btn{flex-basis:100%}
+    }
+  </style>
+</head>
+
+<body data-page="mapa">
+  <!-- TOPBAR CLONADO DE RESERVAS -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+
+      <nav class="nav" id="mainNav">
+        <a href="operador-panel.html"  data-page="dashboard">Panel</a>
+        <a href="admin-reservas.html"   data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-page="habitaciones">Habitaciones</a>
+        <a href="operador-mapa.html"    data-page="mapa">Mapa</a>
+        <a href="operador-responder.html" data-page="mail">Responder mail</a>
+        <a href="admin-usuarios.html"   data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html"      data-page="tipos">Tipos</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div id="userName">Operador</div>
+        <span id="userRoleBadge" class="badge-role">operador</span>
+        <button class="logout" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB IGUAL -->
+  <div class="breadcrumb">
+    <span><a id="bcHome" href="operador-panel.html">Panel</a></span>
+    <span>Mapa</span>
+  </div>
+
+  <!-- CONTENIDO -->
+  <section class="container py-4">
+    <h1 class="h1 mb-2">Mapa de habitaciones</h1>
+    <p class="p-muted">Visualización del estado de cada habitación por piso.</p>
+
+    <div class="card">
+      <div class="d-flex align-items-end gap-3 flex-wrap">
+        <div>
+          <label class="form-label mb-1">Fecha de estado</label>
+          <input id="fechaEstado" type="date" class="form-control" style="width:180px">
+        </div>
+
+        <div>
+          <label class="form-label mb-1">Piso</label>
+          <select id="fPiso" class="form-select" style="width:140px"></select>
+        </div>
+
+        <div class="legend ms-auto">
+          <span><i class="state-dot" style="background:#d1ffd8"></i>Disponible</span>
+          <span><i class="state-dot" style="background:#ffc4d4"></i>Ocupada</span>
+          <span><i class="state-dot" style="background:#fff0b3"></i>Mantenimiento</span>
+        </div>
+      </div>
+
+      <div id="contenedor" class="mt-3"></div>
+    </div>
+  </section>
+
+  <script type="module">
+    import { requireRoles, setBackLink } from '../assets/custom/auth.js';
+
+    const rol = requireRoles('operador','admin');
+    setBackLink(); // si no hay #backLink no pasa nada
+
+    // Nombre + badge
+    document.getElementById('userName').textContent =
+      localStorage.getItem('userName') || 'Operador';
+    const b = document.getElementById('userRoleBadge');
+    b.textContent = rol;
+    if (rol === 'admin') {
+      b.style.background = 'rgba(230,28,93,.12)';
+      b.style.color = '#e61c5d';
+    }
+
+    // Menú según rol y activo
+    document.querySelectorAll('#mainNav a[data-page]').forEach(a => {
+      const page = a.dataset.page;
+      if (page === 'mapa') a.classList.add('active');
+
+      if ((page === 'usuarios' || page === 'tipos') && rol !== 'admin') {
+        a.style.display = 'none';
+      }
+      if (page === 'mail' && rol !== 'operador') {
+        a.style.display = 'none';
+      }
+    });
+
+    const token = localStorage.getItem('token');
+    const fPiso = document.getElementById('fPiso');
+    const cont  = document.getElementById('contenedor');
+    const fechaInput = document.getElementById('fechaEstado');
+    let base = [];
+
+    const cardClass = (estado='') => {
+      const s = String(estado).toLowerCase();
+      if (s.includes('mant')) return 'is-maint';
+      if (s.includes('cerr') || s.includes('ocup')) return 'is-busy';
+      return 'is-free';
+    };
+    const badgeClass = (estado='') => {
+      const s = String(estado).toLowerCase();
+      if (s.includes('mant')) return 'badge-state maint';
+      if (s.includes('cerr') || s.includes('ocup')) return 'badge-state busy';
+      return 'badge-state free';
+    };
+    const prettyEstado = (estado='') => {
+      const s = String(estado).toLowerCase();
+      if (s.includes('mant')) return 'Mantenimiento';
+      if (s.includes('cerr') || s.includes('ocup')) return 'Ocupada';
+      if (s.includes('abier') || s.includes('disp')) return 'Disponible';
+      return estado || '—';
+    };
+    const fmtFecha = (f) => {
+      if (!f) return '—';
+      const s = String(f).slice(0,10); // YYYY-MM-DD
+      const [y,m,d] = s.split('-');
+      if (!y || !m || !d) return f;
+      return `${d}/${m}/${y}`;
+    };
+
+    function pintar(pisoSel){
+      const rooms = base.filter(r => String(r.piso) === String(pisoSel));
+      cont.innerHTML = `
+        <div class="map-grid">
+          ${rooms.map(r => `
+            <div class="room-card ${cardClass(r.estado)}">
+              <div>
+                <div class="room-head">
+                  <h3 class="room-title">Hab. ${r.numero}</h3>
+                  <span class="${badgeClass(r.estado)}">${prettyEstado(r.estado)}</span>
+                </div>
+                <div class="room-type">${r.tipo || ''}</div>
+                <div class="room-last">Último cambio: ${fmtFecha(r.fecha_estado)}</div>
+              </div>
+              <div class="room-actions">
+                <button class="btn" data-id="${r.id}" data-act="abrir">Abrir</button>
+                <button class="btn" data-id="${r.id}" data-act="ocupar">Ocupar</button>
+                <button class="btn" data-id="${r.id}" data-act="mantenimiento">Mant.</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function fechaSeleccionada() {
+      return fechaInput.value || new Date().toISOString().slice(0,10);
+    }
+
+    // Cambiar estado
+    cont.addEventListener('click', async (e)=>{
+      const act = e.target?.dataset?.act;
+      const id  = e.target?.dataset?.id;
+      if (!act || !id) return;
+
+      const fecha = fechaSeleccionada(); // YYYY-MM-DD
+
+      const r = await fetch(`http://localhost:4000/api/admin/habitaciones/${id}/estado`, {
+        method:'PATCH',
+        headers:{
+          'Content-Type':'application/json',
+          Authorization:'Bearer '+token
+        },
+        body: JSON.stringify({
+          estado: act,
+          fecha_estado: fecha
+        })
+      });
+
+      if (!r.ok) {
+        alert(await r.text());
+        return;
+      }
+
+      // Después de guardar, recargo la info para esa fecha
+      await cargarHabitaciones();
+    });
+
+    // Cargar habitaciones (según fecha seleccionada)
+    async function cargarHabitaciones(){
+      const fecha = fechaSeleccionada();
+      const url  = `http://localhost:4000/api/admin/habitaciones?fecha=${fecha}`;
+
+      const res = await fetch(url, {
+        headers:{ Authorization:'Bearer '+token }
+      });
+      if (!res.ok) { alert('No autorizado'); return; }
+
+      base = await res.json();
+      const pisos = [...new Set(base.map(x => x.piso))].sort((a,b)=>a-b);
+      fPiso.innerHTML = pisos.map(p => `<option value="${p}">${p}</option>`).join('');
+      fPiso.onchange = () => pintar(fPiso.value);
+      if (pisos.length) {
+        const actual = fPiso.value || pisos[0];
+        fPiso.value = actual;
+        pintar(actual);
+      } else {
+        cont.innerHTML = '<p class="text-muted">No hay habitaciones cargadas.</p>';
+      }
+    }
+
+    // Cuando cambia la fecha, recargo
+    fechaInput.addEventListener('change', () => {
+      cargarHabitaciones();
+    });
+
+    // Init
+    (async function init(){
+      const hoy = new Date().toISOString().slice(0,10);
+      fechaInput.value = hoy;
+      await cargarHabitaciones();
+    })();
+  </script>
+
+  <script>
+    function logout(){
+      localStorage.clear();
+      location.href = 'mi-cuenta.html';
+    }
+  </script>
+</body>
+</html>

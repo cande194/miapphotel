@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear cuenta - Hotel Alejandro I</title>
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('../../../../imgs/fondo-mi-cuenta.jpg.jpg') no-repeat center center/cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1;
+    }
+    .register-box {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      max-width: 420px;
+      width: 100%;
+    }
+    .btn-full {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h2 class="text-center mb-4">Crear cuenta nueva</h2>
+    <form onsubmit="registerUser(event)">
+      <div class="mb-3">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" class="form-control" id="regName" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="regEmail" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="regPassword" required>
+      </div>
+      <button type="submit" class="btn btn-outline-success btn-full">Crear cuenta</button>
+    </form>
+    <div class="text-center mt-3">
+      <a href="mi-cuenta.html" class="text-muted">← Volver</a>
+    </div>
+  </div>
+
+  <script>
+    function registerUser(event) {
+      event.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      localStorage.setItem('userName', name);
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', 'user');
+      alert('¡Cuenta creada con éxito!');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

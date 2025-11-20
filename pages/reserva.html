@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <title>Reservar - Hotel Alejandro I</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400|Playfair+Display:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/villa/css/animate.css">
+    <link rel="stylesheet" href="../assets/villa/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/aos.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="../assets/villa/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/villa/css/style.css">
+    <link rel="stylesheet" href="../assets/custom/theme-royal.css"/>
+
+    <style>
+      body{
+        font-family:"Mukta Mahee","Poppins",sans-serif;
+      }
+
+      /* NAVBAR */
+      .navbar{
+        background-color:rgba(255,255,255,.15)!important;
+        backdrop-filter:blur(10px);
+        transition:background-color .4s ease, box-shadow .4s ease;
+      }
+      .navbar.scrolled{
+        background-color:#fff!important;
+        box-shadow:0 2px 10px rgba(0,0,0,.1);
+      }
+      .navbar-nav .nav-link{
+        position:relative;
+        color:#fff!important;
+        font-weight:500;
+        margin:0 10px;
+        transition:color .3s ease;
+      }
+      .navbar-nav .nav-link::after{
+        content:'';
+        position:absolute;
+        width:0%;
+        height:2px;
+        bottom:0;
+        left:50%;
+        background-color:#e61c5d;
+        transition:all .3s ease;
+      }
+      .navbar-nav .nav-link:hover::after{
+        width:100%;
+        left:0;
+      }
+      .navbar-nav .nav-link:hover{
+        color:#e61c5d!important;
+      }
+
+      .btn-primary{
+        background-color:#e61c5d;
+        border:none;
+        padding:8px 20px;
+        border-radius:25px;
+        font-weight:600;
+        transition:transform .3s ease,background-color .3s ease;
+      }
+      .btn-primary:hover{
+        background-color:#c0174c;
+        transform:scale(1.05);
+      }
+
+      .form-control,.form-select{
+        border-radius:0;
+      }
+
+      /* HÉROE */
+      .site-hero{
+        height:75vh;
+        background-size:cover;
+        background-position:center bottom;
+        display:flex;
+        align-items:center;
+        position:relative;
+      }
+      .site-hero .heading,
+      .site-hero .sub-heading{
+        color:#fff;
+      }
+
+      /* TARJETA DEL BUSCADOR */
+      .booking-card{
+        border-radius:12px;
+      }
+      .booking-card .form-label{
+        font-weight:500;
+      }
+
+      /* RESULTADOS – CONTROLES */
+      .result-header{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-between;
+        align-items:center;
+        gap:1rem;
+        margin-bottom:1.5rem;
+      }
+      .result-header h4{
+        margin:0;
+      }
+      .result-controls{
+        display:flex;
+        flex-wrap:wrap;
+        gap:.75rem;
+        align-items:center;
+      }
+      .result-controls .dropdown-toggle,
+      .result-controls select{
+        font-size:.9rem;
+      }
+
+      /* TARJETAS DE HABITACIÓN */
+      .habit-card{
+        background:#fff;
+        border-radius:12px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.05);
+        display:flex;
+        flex-direction:row;
+        overflow:hidden;
+        margin-bottom:1.5rem;
+      }
+      .habit-card-img{
+        flex:0 0 40%;
+        min-height:220px;
+        background-size:cover;
+        background-position:center;
+      }
+      .habit-card-body{
+        flex:1;
+        padding:20px 24px;
+        display:flex;
+        flex-direction:column;
+      }
+      .habit-title{
+        font-size:1.2rem;
+        font-weight:600;
+        margin-bottom:.3rem;
+      }
+      .habit-meta{
+        font-size:.85rem;
+        text-transform:uppercase;
+        letter-spacing:.06em;
+        color:#777;
+        margin-bottom:.75rem;
+      }
+      .habit-desc{
+        font-size:.9rem;
+        color:#555;
+        margin-bottom:.75rem;
+      }
+      .habit-benefit{
+        font-size:.9rem;
+        margin-bottom:1rem;
+      }
+      .habit-price-block{
+        margin-top:auto;
+        display:flex;
+        flex-direction:column;
+        gap:.35rem;
+      }
+      .habit-price-night{
+        font-size:.9rem;
+        color:#555;
+      }
+      .habit-price-total{
+        font-size:1rem;
+        font-weight:600;
+        color:#333;
+      }
+      .habit-note{
+        font-size:.75rem;
+        color:#999;
+      }
+      .btn-tarifa{
+        margin-top:.75rem;
+        align-self:flex-start;
+        border-radius:20px;
+        padding:.4rem 1.3rem;
+        background:#b8a999;
+        border:none;
+        color:#fff;
+        font-weight:500;
+        text-decoration:none;
+        display:inline-block;
+      }
+      .btn-tarifa:hover{
+        background:#9b8c7a;
+        color:#fff;
+      }
+
+      @media (max-width: 767.98px){
+        .habit-card{
+          flex-direction:column;
+        }
+        .habit-card-img{
+          width:100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase text-white" href="index.html">Hotel Alejandro I</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+            <li class="nav-item"><a class="nav-link" href="comida.html">Comida</a></li>
+            <li class="nav-item"><a class="nav-link" href="spa.html">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="blog.html">Reseñas</a></li>
+            <li class="nav-item"><a class="nav-link" href="ubicacion.html">Ubicación</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HÉROE -->
+    <section class="site-hero overlay" style="background-image:url('https://th.bing.com/th/id/R.7460b29a1c9c2de61bd1edf71807a41c?rik=Q7PlR8FY13kYEg&riu=http%3a%2f%2fwww.acevivillarroelbarcelona.com%2fimg%2fjpg%2fhabitaciones%2fHab-Deluxe-01.jpg&ehk=EW5fKWo2cGUBsI4%2bGEqXICEhbsWfE84kUFEw0b3gNSc%3d&risl=&pid=ImgRaw&r=0');">
+      <div class="container">
+        <div class="row site-hero-inner justify-content-center align-items-center">
+          <div class="col-md-10 text-center">
+            <h1 class="heading" data-aos="fade-up">Reservá tu estadía</h1>
+            <p class="sub-heading mb-5" data-aos="fade-up" data-aos-delay="100">
+              Seleccioná tus fechas y te mostramos disponibilidad al instante.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUSCADOR -->
+    <section class="section bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="bg-white p-5 shadow-sm booking-card" data-aos="fade-up">
+              <h3 class="mb-4 text-center">Buscá disponibilidad</h3>
+
+              <form id="formReserva" action="#" method="post">
+                <!-- FILA 1: FECHAS -->
+                <div class="row mb-4">
+                  <div class="col-md-6 mb-3 mb-md-0">
+                    <label for="checkin" class="form-label">Fecha de entrada</label>
+                    <input type="date" id="checkin" class="form-control" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="checkout" class="form-label">Fecha de salida</label>
+                    <input type="date" id="checkout" class="form-control" required>
+                  </div>
+                </div>
+
+                <!-- FILA 2: ADULTOS / NIÑOS / HABITACIONES -->
+                <div class="row mb-4">
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <label for="adultos" class="form-label">Adultos</label>
+                    <select id="adultos" class="form-select" required>
+                      <option value="1">1</option>
+                      <option value="2" selected>2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <label for="ninios" class="form-label">Niños</label>
+                    <select id="ninios" class="form-select">
+                      <option value="0" selected>0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="habitaciones" class="form-label">Habitaciones</label>
+                    <select id="habitaciones" class="form-select" required>
+                      <option value="1" selected>1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- FILA 3: AUTOS -->
+                <div class="row align-items-center mb-4">
+                  <div class="col-md-4 mb-2 mb-md-0">
+                    <label for="autos" class="form-label">Autos</label>
+                    <select id="autos" class="form-select">
+                      <option value="0" selected>0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
+                  <div class="col-md-8">
+                    <small class="text-muted d-block">
+                      Indicá cuántos vehículos traerías.
+                    </small>
+                  </div>
+                </div>
+
+                <!-- BOTÓN -->
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    Buscar disponibilidad
+                  </button>
+                </div>
+              </form>
+
+              <div id="mensaje" class="mt-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTADOS DE HABITACIONES -->
+    <section class="section" id="seccionResultados" style="display:none;">
+      <div class="container">
+        <div class="result-header">
+          <h4 id="tituloResultados">Hay 5 tipos de habitaciones disponibles</h4>
+          <div class="result-controls">
+            <!-- ORDENAR -->
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownOrden"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Ordenar por: <span id="textoOrden">Precio más bajo</span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownOrden">
+                <li><a class="dropdown-item opcion-orden" href="#" data-orden="asc">Precio más bajo</a></li>
+                <li><a class="dropdown-item opcion-orden" href="#" data-orden="desc">Precio más alto</a></li>
+              </ul>
+            </div>
+
+            <!-- DIVISA -->
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownDivisa"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Divisa: <span id="textoDivisa">ARS - Peso argentino</span>
+              </button>
+              <ul class="dropdown-menu" id="menuDivisas" aria-labelledby="dropdownDivisa">
+                <!-- buscador -->
+                <li class="px-3 py-2">
+                  <input type="text" class="form-control form-control-sm" id="buscadorDivisa"
+                         placeholder="Busca la divisa">
+                </li>
+                <li class="dropdown-divider"></li>
+
+                <!-- opciones de divisa -->
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="ARS" data-nombre="ARS - Peso argentino">ARS - Peso argentino</a></li>
+
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="USD" data-nombre="USD - Dólar estadounidense">USD - Dólar estadounidense</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="EUR" data-nombre="EUR - Euro">EUR - Euro</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="GBP" data-nombre="GBP - Libra esterlina">GBP - Libra esterlina</a></li>
+
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-header px-3">América Latina</li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="BRL" data-nombre="BRL - Real brasileño">BRL - Real brasileño</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="CLP" data-nombre="CLP - Peso chileno">CLP - Peso chileno</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="MXN" data-nombre="MXN - Peso mexicano">MXN - Peso mexicano</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="UYU" data-nombre="UYU - Peso uruguayo">UYU - Peso uruguayo</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="COP" data-nombre="COP - Peso colombiano">COP - Peso colombiano</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="PYG" data-nombre="PYG - Guaraní paraguayo">PYG - Guaraní paraguayo</a></li>
+
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-header px-3">Otros</li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="AUD" data-nombre="AUD - Dólar australiano">AUD - Dólar australiano</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="CAD" data-nombre="CAD - Dólar canadiense">CAD - Dólar canadiense</a></li>
+                <li><a class="dropdown-item opcion-divisa" href="#"
+                       data-divisa="JPY" data-nombre="JPY - Yen japonés">JPY - Yen japonés</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="listaHabitaciones"></div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="section footer-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Términos y Condiciones</a></li>
+              <li><a href="#">Política de Privacidad</a></li>
+              <li><a href="#">Ayuda</a></li>
+              <li><a href="#">Habitaciones</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5">
+            <ul class="list-unstyled link">
+              <li><a href="#">Nuestra Ubicación</a></li>
+              <li><a href="#">Los Anfitriones</a></li>
+              <li><a href="#">Nosotros</a></li>
+              <li><a href="#">Contacto</a></li>
+              <li><a href="#">Restaurante</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-5 pr-md-5 contact-info">
+            <p><span class="d-block">Dirección:</span> <span>Av. Belgrano 252, A4400 Salta, Argentina</span></p>
+            <p><span class="d-block">Teléfono:</span> <span>+54 387 431-1000</span></p>
+            <p><span class="d-block">Email:</span> <span>info@alejandroisalta.com</span></p>
+          </div>
+          <div class="col-md-3 mb-5">
+            <p>Suscríbete a nuestro Boletín</p>
+            <form action="#" class="footer-Boletín">
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Tu correo electrónico...">
+                <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row bordertop pt-5">
+          <p class="col-md-6 text-left">
+            Hotel Alejandro I - Experiencias que perduran en el tiempo. |
+            &copy; <script>document.write(new Date().getFullYear());</script> Todos los derechos reservados
+          </p>
+          <p class="col-md-6 text-right social">
+            <a href="#"><span class="fa fa-tripadvisor"></span></a>
+            <a href="#"><span class="fa fa-facebook"></span></a>
+            <a href="#"><span class="fa fa-twitter"></span></a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="../assets/villa/js/jquery-3.2.1.min.js"></script>
+    <script src="../assets/villa/js/popper.min.js"></script>
+    <script src="../assets/villa/js/bootstrap.min.js"></script>
+    <script src="../assets/villa/js/owl.carousel.min.js"></script>
+    <script src="../assets/villa/js/jquery.waypoints.min.js"></script>
+    <script src="../assets/villa/js/aos.js"></script>
+    <script src="../assets/villa/js/main.js"></script>
+
+    <script>
+      // NAVBAR transparente que se vuelve blanca al hacer scroll
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+
+      /* ========== DATOS DE HABITACIONES (mock / demo) ========== */
+      const HABITACIONES = [
+        {
+          id: 'std_vista',
+          nombre: 'Estándar con Vista',
+          camas: '1 cama king o 2 camas individuales',
+          vista: 'Vista ciudad',
+          metros: '30 m²',
+          descripcion: 'Habitación cómoda con grandes ventanales y una vista privilegiada de la ciudad de Salta.',
+          precioNocheARS: 185000,
+          imagen: '../../../imgs/habitacion-vista.png'
+        },
+        {
+          id: 'premium',
+          nombre: 'Premium',
+          camas: '1 cama king',
+          vista: 'Vista ciudad',
+          metros: '30 m²',
+          descripcion: 'Mayor amplitud, amenities superiores y escritorio de trabajo.',
+          precioNocheARS: 215000,
+          imagen: '../../../imgs/habitacion-premium.png'
+        },
+        {
+          id: 'suite_junior',
+          nombre: 'Suite Junior',
+          camas: '1 cama king · sofá cama',
+          vista: 'Vista panorámica',
+          metros: '40 m²',
+          descripcion: 'Espacio tipo suite con zona de estar, ideal para estadías más largas.',
+          precioNocheARS: 260000,
+          imagen: '../../../imgs/habitacion-junior.png'
+        },
+        {
+          id: 'suite_pres',
+          nombre: 'Suite Presidencial',
+          camas: '1 cama king',
+          vista: 'Vista cerros',
+          metros: '60 m²',
+          descripcion: 'Nuestra habitación más exclusiva, con living independiente y servicios premium.',
+          precioNocheARS: 420000,
+          imagen: '../../../imgs/habitacion-presidencial.png'
+        },
+        {
+          id: 'standard',
+          nombre: 'Estándar',
+          camas: '1 cama queen o 2 camas individuales',
+          vista: 'Interior',
+          metros: '28 m²',
+          descripcion: 'Opción funcional y confortable, perfecta para viajes de trabajo o escapadas cortas.',
+          precioNocheARS: 160000,
+          imagen: '../../../imgs/habitacion-estandar.png'
+        }
+      ];
+
+      /* Tasas de cambio DEMO (valores de ejemplo) */
+      const CAMBIO = {
+        ARS: 1,
+        USD: 1100,
+        EUR: 1180,
+        GBP: 1380,
+        BRL: 220,
+        CLP: 1.2,
+        MXN: 60,
+        UYU: 30,
+        COP: 0.28,
+        PYG: 0.2,
+        AUD: 730,
+        CAD: 800,
+        JPY: 7.5
+      };
+
+      let nochesActuales = 1;
+      let divisaActual = 'ARS';
+      let ordenActual = 'asc'; // asc = precio más bajo, desc = más alto
+
+      function calcularNoches(checkin, checkout){
+        const d1 = new Date(checkin);
+        const d2 = new Date(checkout);
+        const diffMs = d2 - d1;
+        const noches = diffMs / (1000 * 60 * 60 * 24);
+        return noches;
+      }
+
+      function convertirDesdeARS(montoARS, divisa){
+        const tasa = CAMBIO[divisa] || 1;
+        return montoARS / tasa;
+      }
+
+      function formatearMoneda(monto, divisa){
+        let locale = 'es-AR';
+        if(divisa === 'USD') locale = 'en-US';
+        if(divisa === 'EUR') locale = 'es-ES';
+        if(divisa === 'GBP') locale = 'en-GB';
+        if(divisa === 'JPY') locale = 'ja-JP';
+        return monto.toLocaleString(locale, {
+          style:'currency',
+          currency: divisa
+        });
+      }
+
+      function renderHabitaciones(){
+        const cont = document.getElementById('listaHabitaciones');
+        cont.innerHTML = '';
+
+        // ordenar
+        const habitacionesOrdenadas = [...HABITACIONES].sort((a,b)=>{
+          if(ordenActual === 'asc'){
+            return a.precioNocheARS - b.precioNocheARS;
+          }else{
+            return b.precioNocheARS - a.precioNocheARS;
+          }
+        });
+
+        habitacionesOrdenadas.forEach(hab => {
+          const precioNocheConvertido = convertirDesdeARS(hab.precioNocheARS, divisaActual);
+          const total = precioNocheConvertido * nochesActuales;
+
+          const card = document.createElement('div');
+          card.className = 'habit-card';
+
+          const imgDiv = document.createElement('div');
+          imgDiv.className = 'habit-card-img';
+          imgDiv.style.backgroundImage = `url('${hab.imagen}')`;
+
+          const body = document.createElement('div');
+          body.className = 'habit-card-body';
+
+          body.innerHTML = `
+            <div>
+              <div class="habit-title">${hab.nombre}</div>
+              <div class="habit-meta">
+                ${hab.camas.toUpperCase()}  ·  ${hab.vista.toUpperCase()}  ·  ${hab.metros.toUpperCase()}
+              </div>
+              <p class="habit-desc">${hab.descripcion}</p>
+              <p class="habit-benefit">
+                <i class="fa fa-cutlery" aria-hidden="true"></i>
+                &nbsp;Alojamiento y desayuno
+              </p>
+            </div>
+            <div class="habit-price-block">
+              <div class="habit-price-night">
+                Desde <strong>${formatearMoneda(precioNocheConvertido, divisaActual)}</strong> por noche
+              </div>
+              <div class="habit-price-total">
+                Total para ${nochesActuales} noche${nochesActuales>1?'s':''}:
+                <strong>${formatearMoneda(total, divisaActual)}</strong>
+              </div>
+              <a href="tarifas.html" class="btn-tarifa">
+                Seleccionar tarifa
+              </a>
+              <span class="habit-note">
+                Impuestos y tasas no incluidos – precios de referencia.
+              </span>
+            </div>
+          `;
+
+          card.appendChild(imgDiv);
+          card.appendChild(body);
+          cont.appendChild(card);
+        });
+
+        document.getElementById('tituloResultados').textContent =
+          `Hay ${habitacionesOrdenadas.length} tipos de habitaciones disponibles`;
+      }
+
+      // Envío del formulario
+      document.getElementById('formReserva').addEventListener('submit', function(e){
+        e.preventDefault();
+        const checkin  = document.getElementById('checkin').value;
+        const checkout = document.getElementById('checkout').value;
+        const mensaje  = document.getElementById('mensaje');
+
+        if(!checkin || !checkout){
+          mensaje.innerHTML = `
+            <div class="alert alert-warning">
+              Por favor, seleccioná ambas fechas.
+            </div>`;
+          return;
+        }
+
+        const noches = calcularNoches(checkin, checkout);
+        if(isNaN(noches) || noches < 1){
+          mensaje.innerHTML = `
+            <div class="alert alert-danger">
+              La fecha de salida debe ser posterior a la fecha de entrada.
+            </div>`;
+          return;
+        }
+
+        nochesActuales = noches;
+
+        mensaje.innerHTML = `
+          <div class="alert alert-success">
+            Mostrando disponibilidad para <strong>${checkin}</strong> al <strong>${checkout}</strong>
+            (${nochesActuales} noche${nochesActuales>1?'s':''}).
+          </div>`;
+
+        document.getElementById('seccionResultados').style.display = 'block';
+        renderHabitaciones();
+        document.getElementById('seccionResultados').scrollIntoView({behavior:'smooth'});
+      });
+
+      // Cambiar divisa
+      document.querySelectorAll('.opcion-divisa').forEach(el=>{
+        el.addEventListener('click', function(e){
+          e.preventDefault();
+          const nuevaDivisa = this.getAttribute('data-divisa');
+          const nombre = this.getAttribute('data-nombre');
+          divisaActual = nuevaDivisa;
+          document.getElementById('textoDivisa').textContent = nombre;
+          renderHabitaciones();
+        });
+      });
+
+      // Buscador de divisas dentro del dropdown
+      const inputBuscadorDivisa = document.getElementById('buscadorDivisa');
+      if(inputBuscadorDivisa){
+        inputBuscadorDivisa.addEventListener('keyup', function(){
+          const termino = this.value.toLowerCase();
+          document.querySelectorAll('#menuDivisas .opcion-divisa').forEach(a=>{
+            const texto = a.textContent.toLowerCase();
+            a.parentElement.style.display = texto.includes(termino) ? 'block' : 'none';
+          });
+        });
+      }
+
+      // Cambiar orden
+      document.querySelectorAll('.opcion-orden').forEach(el=>{
+        el.addEventListener('click', function(e){
+          e.preventDefault();
+          const nuevoOrden = this.getAttribute('data-orden');
+          ordenActual = nuevoOrden;
+          document.getElementById('textoOrden').textContent =
+            (nuevoOrden === 'asc') ? 'Precio más bajo' : 'Precio más alto';
+          renderHabitaciones();
+        });
+      });
+    </script>
+  </body>
+</html>

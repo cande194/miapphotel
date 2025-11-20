@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Usuarios · Admin · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS unificados (sin duplicados) -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <link rel="stylesheet" href="../assets/custom/admin-layout.css">
+
+  <style>
+    .container-admin{max-width:1200px;margin:32px auto;padding:0 16px}
+    .container-admin .h1{font-size:40px;font-weight:800;margin-bottom:.25rem}
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px}
+  </style>
+</head>
+
+<body data-page="usuarios">
+  <!-- ====== NAVBAR / TOPBAR ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+
+      <nav class="nav" id="mainNav">
+        <a href="admin-panel.html"        data-roles="admin,operador" data-page="dashboard">Panel</a>
+        <a href="admin-reservas.html"     data-roles="admin,operador" data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-roles="admin,operador" data-page="habitaciones">Habitaciones</a>
+        <a href="admin-usuarios.html"     data-roles="admin"          data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html"        data-roles="admin"          data-page="tipos">Tipos de habitaciones</a>
+        
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div id="userName">Usuario</div>
+        <span id="userRoleBadge" class="badge-role">ROL</span>
+        <button class="logout" id="btnLogout" title="Cerrar sesión" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span><a href="admin-panel.html">Panel</a></span>
+    <span>Usuarios</span>
+  </div>
+
+  <!-- ====== CONTENIDO ====== -->
+  <div class="container-admin">
+    <div class="h1">Usuarios</div>
+    <p class="p-muted">Operadores y administradores del sistema.</p>
+
+    <div class="card">
+      <div class="toolbar">
+        <input id="q" class="input" placeholder="Buscar por nombre, email o rol…">
+        <a class="btn btn-ghost ms-auto" href="admin-panel.html">← Volver</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Activo</th></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TOPBAR INIT (roles/activo) ====== -->
+  <script>
+    (function initTopbar(){
+      const token = localStorage.getItem('token');
+      const role  = localStorage.getItem('userRole');
+      const name  = localStorage.getItem('userName') || 'Usuario';
+
+      // Solo ADMIN
+      if (!token || role!=='admin'){
+        location.href = 'ingresar-admin.html';
+        return;
+      }
+
+      document.getElementById('userName').textContent = name;
+      const badge = document.getElementById('userRoleBadge');
+      badge.textContent = role;
+      badge.style.background = 'rgba(230,28,93,.12)';
+      badge.style.color = '#e61c5d';
+
+      const nav = document.getElementById('mainNav');
+      nav.querySelectorAll('a[data-roles]').forEach(a=>{
+        const ok = a.getAttribute('data-roles').split(',').map(s=>s.trim());
+        if (!ok.includes(role)) a.style.display = 'none';
+      });
+
+      const page = document.body.dataset.page || '';
+      nav.querySelectorAll('a[data-page]').forEach(a=>{
+        if (a.dataset.page === page) a.classList.add('active');
+      });
+    })();
+
+    function logout(){
+      localStorage.clear();
+      location.href = 'mi-cuenta.html';
+    }
+  </script>
+
+  <!-- ====== LÓGICA DE USUARIOS ====== -->
+  <script>
+  (async function(){
+    const t = localStorage.getItem('token');
+    const r = localStorage.getItem('userRole');
+    if (!t || r !== 'admin') { location.href = 'ingresar-admin.html'; return; }
+
+    const res = await fetch('http://localhost:4000/api/admin/usuarios', {
+      headers: { Authorization: 'Bearer '+t }
+    });
+    if(!res.ok){ alert('No autorizado'); return; }
+
+    const base = await res.json();
+    const tbody = document.getElementById('tbody');
+    const q = document.getElementById('q');
+
+    const paint = rows => tbody.innerHTML = rows.map(u=>`
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.nombre||'-'}</td>
+        <td>${u.email||'-'}</td>
+        <td><span class="badge badge-neutral">${u.rol||'-'}</span></td>
+        <td>${u.activo ? '<span class="badge badge-ok">Sí</span>' : '<span class="badge badge-bad">No</span>'}</td>
+      </tr>
+    `).join('');
+
+    paint(base);
+
+    q.addEventListener('input', ()=>{
+      const v = q.value.trim().toLowerCase();
+      paint(base.filter(u =>
+        String(u.id).includes(v) ||
+        (u.nombre||'').toLowerCase().includes(v) ||
+        (u.email||'').toLowerCase().includes(v) ||
+        (u.rol||'').toLowerCase().includes(v)
+      ));
+    });
+  })();
+  </script>
+</body>
+</html>

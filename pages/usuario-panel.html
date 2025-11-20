@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Panel de Usuario - Hotel Alejandro I</title>
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: "Poppins", sans-serif;
+    }
+    .navbar {
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #f25b78;
+    }
+    .navbar-nav {
+      gap: 1.8rem; /* separa más las opciones */
+    }
+    .nav-link {
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .nav-link.active {
+      color: #f25b78 !important;
+      font-weight: 600;
+    }
+    .btn-rosa {
+      background-color: #f25b78;
+      color: #fff;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+    .btn-rosa:hover {
+      background-color: #e04665;
+      color: #fff;
+    }
+    .card {
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 15px;
+    }
+    .estado {
+      font-size: 0.85rem;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    .estado.pagada {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .estado.pendiente {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .section-content {
+      display: none;
+    }
+    .section-content.active {
+      display: block;
+    }
+
+    /* resumen huésped: tarjetas tipo panel */
+    .summary-badges .badge {
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border-radius: 12px;
+    }
+    .badge-nivel {
+      background-color: #fbe9f0;
+      color: #f25b78;
+    }
+    .badge-descuento {
+      background-color: #e3f2fd;
+      color: #1565c0;
+    }
+    .stats-card{
+      background-color:#ffffff;
+      border-radius:14px;
+      padding:16px 24px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.04);
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .stats-label{
+      font-size:0.95rem;
+      color:#555;
+    }
+    .stats-value{
+      font-size:1.6rem;
+      font-weight:600;
+      margin-top:8px;
+    }
+    .stats-value .badge-nivel,
+    .stats-value .badge-descuento{
+      font-size:1rem;
+      padding:6px 14px;
+      border-radius:999px;
+    }
+
+    /* confirmación de reserva */
+    .confirm-badge {
+      font-size: 0.85rem;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    .confirmada {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    .en-revision {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    /* TABLA DE RESERVAS: columnas menos amontonadas */
+    .table-reservas{
+      table-layout: auto;
+    }
+    .table-reservas th,
+    .table-reservas td{
+      white-space: nowrap;
+      padding: 12px 18px;
+    }
+    .table-reservas th:nth-child(4),
+    .table-reservas th:nth-child(5),
+    .table-reservas td:nth-child(4),
+    .table-reservas td:nth-child(5){
+      min-width: 130px;
+    }
+
+    /* Reseñas: estado */
+    .badge-estado {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .estado-pendiente {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .estado-aprobada {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    .estado-rechazada {
+      background-color: #fdecea;
+      color: #c62828;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light px-4">
+    <a class="navbar-brand" href="#">HOTEL ALEJANDRO I</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link active" onclick="mostrarSeccion(event,'reservas')">Mis reservas</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="mostrarSeccion(event,'beneficios')">Beneficios y descuentos</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="mostrarSeccion(event,'resenas')">Mis reseñas</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="mostrarSeccion(event,'perfil')">Mi perfil</a></li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-rosa" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- INFO DEL USUARIO -->
+  <div class="container mt-4">
+    <div class="card mb-3 p-4">
+      <div class="row align-items-center">
+        <div class="col-md-2 text-center">
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Usuario" class="img-fluid" width="100">
+        </div>
+        <div class="col-md-10 user-info">
+          <h5 id="nombreUsuario">NORMA CURI RAMOS</h5>
+          <span><strong>Email:</strong> <span id="correoUsuario">usuario@gmail.com</span></span><br>
+          <span><strong>Teléfono:</strong> <span id="telefonoUsuario">(9635) 32243</span></span><br>
+          <span><strong>Rol:</strong> Cliente</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUMEN RÁPIDO DEL HUÉSPED (solo tarjetas, sin rectángulo de fondo) -->
+    <div class="mb-4">
+      <div class="row g-3 text-center">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <div class="stats-card">
+            <div class="stats-label">Total de reservas:</div>
+            <div class="stats-value" id="totalReservas">2</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-2 mb-md-0">
+          <div class="stats-card">
+            <div class="stats-label">Noches acumuladas:</div>
+            <div class="stats-value" id="nochesAcumuladas">0</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-2 mb-md-0">
+          <div class="stats-card summary-badges">
+            <div class="stats-label">Nivel de huésped:</div>
+            <div class="stats-value">
+              <span id="nivelCliente" class="badge badge-nivel">Estándar</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-2 mb-md-0">
+          <div class="stats-card summary-badges">
+            <div class="stats-label">Descuento huésped frecuente:</div>
+            <div class="stats-value">
+              <span id="descuentoFrecuente" class="badge badge-descuento">0%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR DE SECCIONES -->
+  <div class="container mb-5">
+
+    <!-- SECCIÓN: MIS RESERVAS -->
+    <div id="reservas" class="section-content active">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
+        <h2 class="fw-bold mb-3 mb-md-0 text-center text-md-start">Mis reservas</h2>
+        <a href="reserva.html" class="btn btn-rosa">Nueva reserva</a>
+      </div>
+
+      <div class="card p-4">
+        <div class="table-responsive">
+          <table class="table align-middle table-reservas">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>N° de Reservación</th>
+                <th>Habitación</th>
+                <th>Fecha de entrada</th>
+                <th>Fecha de salida</th>
+                <th>Noches</th>
+                <th>Importe base</th>
+                <th>Descuento</th>
+                <th>Total con descuento</th>
+                <th>Confirmación</th>
+                <th>Status</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="reservasBody">
+              <tr>
+                <td>1</td>
+                <td>0001-000000003</td>
+                <td>#112</td>
+                <td class="fecha-entrada">29-03-2025</td>
+                <td class="fecha-salida">30-03-2025</td>
+                <td class="noches"></td>
+                <td class="importe-base">$150.000</td>
+                <td class="descuento"></td>
+                <td class="total-con-descuento"></td>
+                <td>
+                  <span class="confirm-badge confirmada">Confirmada</span>
+                </td>
+                <td><span class="estado pagada">PAGADA</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline-secondary">Ver</button>
+                  <button class="btn btn-sm btn-outline-secondary">Descargar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>0001-000000004</td>
+                <td>#115</td>
+                <td class="fecha-entrada">12-12-2025</td>
+                <td class="fecha-salida">20-12-2025</td>
+                <td class="noches"></td>
+                <td class="importe-base">$1.508.544</td>
+                <td class="descuento"></td>
+                <td class="total-con-descuento"></td>
+                <td>
+                  <span class="confirm-badge en-revision">En revisión</span>
+                </td>
+                <td><span class="estado pendiente">PENDIENTE</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline-secondary">Ver</button>
+                  <button class="btn btn-sm btn-outline-secondary">Descargar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3 text-end">
+          <strong>Total gastado (sin descuentos estimados):</strong>
+          <span id="totalGastado">$0</span>
+        </div>
+
+        <hr>
+        <div class="mt-3 row">
+          <div class="col-md-8">
+            <h6>¿Necesitás ayuda con alguna reserva?</h6>
+            <p class="mb-1">
+              Podés hacer consultas, solicitar cancelaciones o pedir recomendaciones
+              sobre fechas con mayor disponibilidad (por ejemplo, fuera de temporada alta).
+            </p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <a href="contact.html" class="btn btn-outline-secondary btn-sm mb-2">Consultar sobre una reserva</a><br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: BENEFICIOS Y DESCUENTOS -->
+    <div id="beneficios" class="section-content">
+      <h2 class="fw-bold mb-4 text-center">Beneficios y descuentos</h2>
+      <div class="card p-4">
+        <h5>Descuento por duración de la estadía</h5>
+        <ul>
+          <li>4 a 6 noches en una misma reserva: <strong>10% de descuento</strong>.</li>
+          <li>7 noches o más: <strong>15% de descuento</strong>.</li>
+        </ul>
+
+        <h5 class="mt-3">Descuento por huésped frecuente</h5>
+        <p>Según tus noches acumuladas en el hotel:</p>
+        <ul>
+          <li>5–9 noches: <strong>Nivel Bronce</strong> → +5% extra.</li>
+          <li>10–14 noches: <strong>Nivel Plata</strong> → +7% extra.</li>
+          <li>15+ noches: <strong>Nivel Oro</strong> → +10% extra.</li>
+        </ul>
+        <p>
+          Estos porcentajes se suman al descuento por cantidad de noches de cada reserva.
+          En la sección <strong>“Mis reservas”</strong> podés ver el total estimado con descuento aplicado.
+        </p>
+
+        <hr>
+        <h5>Tu estado actual</h5>
+        <p>
+          Noches acumuladas: <strong id="infoNochesAcumuladas">0</strong><br>
+          Nivel: <strong id="infoNivelCliente">Estándar</strong><br>
+          Descuento huésped frecuente: <strong id="infoDescuentoFrecuente">0%</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: MIS RESEÑAS -->
+    <div id="resenas" class="section-content">
+      <h2 class="fw-bold mb-4 text-center">Mis reseñas</h2>
+      <div class="card p-4">
+        <p class="text-muted">
+          Las reseñas que envíes quedarán con estado <strong>Pendiente</strong> para que
+          un <strong>operador/administrador</strong> del hotel las revise.  
+          Solo las reseñas <strong>Aprobadas</strong> se mostrarán luego en la página pública de opiniones.
+        </p>
+
+        <div class="row">
+          <!-- Formulario nueva reseña -->
+          <div class="col-md-5 mb-4">
+            <h5 class="mb-3">Dejar una nueva reseña</h5>
+            <form id="formResena">
+              <div id="mensajeResena" class="mb-2"></div>
+
+              <div class="mb-3">
+                <label class="form-label">Título (opcional)</label>
+                <input type="text" class="form-control" id="tituloResena" placeholder="Por ejemplo: Estadía excelente">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Puntaje</label>
+                <select class="form-select" id="puntajeResena">
+                  <option value="5" selected>5 - Excelente</option>
+                  <option value="4">4 - Muy bueno</option>
+                  <option value="3">3 - Bueno</option>
+                  <option value="2">2 - Regular</option>
+                  <option value="1">1 - Malo</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Tu reseña</label>
+                <textarea class="form-control" id="textoResena" rows="4" required
+                  placeholder="Contanos cómo fue tu experiencia en el hotel..."></textarea>
+              </div>
+
+              <button class="btn btn-rosa" type="submit">Agregar reseña</button>
+            </form>
+          </div>
+
+          <!-- Lista de reseñas -->
+          <div class="col-md-7">
+            <h5 class="mb-3">Mis reseñas</h5>
+            <div id="listaResenas"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: MI PERFIL -->
+    <div id="perfil" class="section-content">
+      <h2 class="fw-bold mb-4 text-center">Mi perfil</h2>
+      <div class="card p-4">
+        <form>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nombre y Apellido</label>
+              <input type="text" class="form-control" value="Norma Curi Ramos">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" value="usuario@gmail.com">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Teléfono</label>
+              <input type="text" class="form-control" value="(9635) 32243">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Preferencia de habitación</label>
+              <select class="form-select">
+                <option selected>Sin preferencia</option>
+                <option>Estándar</option>
+                <option>Estándar con vistas</option>
+                <option>Premium</option>
+                <option>Suite Junior</option>
+                <option>Suite Presidencial</option>
+              </select>
+            </div>
+          </div>
+
+          <hr>
+          <h5>Cambiar contraseña</h5>
+
+          <!-- Mensaje de resultado del cambio de contraseña -->
+          <div id="mensajePassword" class="mb-3"></div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Contraseña actual</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="passActual">
+                <button type="button" class="btn btn-outline-secondary btn-toggle-pass" data-target="passActual">
+                  Ver
+                </button>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Nueva contraseña</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="passNueva">
+                <button type="button" class="btn btn-outline-secondary btn-toggle-pass" data-target="passNueva">
+                  Ver
+                </button>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Repetir nueva contraseña</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="passRepetir">
+                <button type="button" class="btn btn-outline-secondary btn-toggle-pass" data-target="passRepetir">
+                  Ver
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-rosa" id="btnGuardarPerfil">Guardar cambios</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="../assets/villa/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Verificación básica de rol (si la usás)
+    const role = localStorage.getItem('userRole');
+    if (role && role !== 'user') {
+      alert('No tenés permisos para acceder a esta página.');
+      window.location.href = 'mi-cuenta.html';
+    }
+
+    // Cambiar secciones
+    function mostrarSeccion(ev, id) {
+      document.querySelectorAll('.section-content').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      ev.target.classList.add('active');
+    }
+
+    // Parsear importe tipo "$1.508.544"
+    function parsearImporte(texto) {
+      return parseFloat(
+        texto.replace('$', '').replace(/\./g, '').replace(',', '.')
+      ) || 0;
+    }
+
+    function calcularBeneficios() {
+      const filas = document.querySelectorAll('#reservasBody tr');
+      const totalReservas = filas.length;
+      let totalNoches = 0;
+      let totalGastado = 0;
+
+      filas.forEach(fila => {
+        const entradaTxt = fila.querySelector('.fecha-entrada').textContent.trim();
+        const salidaTxt  = fila.querySelector('.fecha-salida').textContent.trim();
+        const importeTxt = fila.querySelector('.importe-base').textContent.trim();
+
+        const [de, me, ae] = entradaTxt.split('-').map(Number);
+        const [ds, ms, as] = salidaTxt.split('-').map(Number);
+
+        const fechaEntrada = new Date(ae, me - 1, de);
+        const fechaSalida  = new Date(as, ms - 1, ds);
+
+        const diffMs = fechaSalida - fechaEntrada;
+        const noches = Math.max(1, diffMs / (1000 * 60 * 60 * 24));
+        fila.querySelector('.noches').textContent = noches;
+
+        const importe = parsearImporte(importeTxt);
+        totalNoches += noches;
+        totalGastado += importe;
+      });
+
+      let descuentoFrecuente = 0;
+      let nivel = 'Estándar';
+
+      if (totalNoches >= 15) {
+        nivel = 'Oro';
+        descuentoFrecuente = 0.10;
+      } else if (totalNoches >= 10) {
+        nivel = 'Plata';
+        descuentoFrecuente = 0.07;
+      } else if (totalNoches >= 5) {
+        nivel = 'Bronce';
+        descuentoFrecuente = 0.05;
+      }
+
+      filas.forEach(fila => {
+        const noches = parseFloat(fila.querySelector('.noches').textContent);
+        const importe = parsearImporte(fila.querySelector('.importe-base').textContent.trim());
+
+        let descuentoBase = 0;
+        if (noches >= 7) {
+          descuentoBase = 0.15;
+        } else if (noches >= 4) {
+          descuentoBase = 0.10;
+        }
+
+        const descuentoTotal = descuentoBase + descuentoFrecuente;
+        const totalConDesc = importe * (1 - descuentoTotal);
+
+        const celDesc = fila.querySelector('.descuento');
+        const celTotalDesc = fila.querySelector('.total-con-descuento');
+
+        if (descuentoTotal > 0) {
+          celDesc.textContent = Math.round(descuentoTotal * 100) + '%';
+          celTotalDesc.textContent = '$' + Math.round(totalConDesc).toLocaleString('es-AR');
+        } else {
+          celDesc.textContent = '-';
+          celTotalDesc.textContent = '$' + Math.round(importe).toLocaleString('es-AR');
+        }
+      });
+
+      document.getElementById('totalReservas').textContent = totalReservas;
+      document.getElementById('nochesAcumuladas').textContent = totalNoches;
+      document.getElementById('nivelCliente').textContent = nivel;
+      document.getElementById('descuentoFrecuente').textContent = Math.round(descuentoFrecuente * 100) + '%';
+      document.getElementById('totalGastado').textContent =
+        '$' + Math.round(totalGastado).toLocaleString('es-AR');
+
+      document.getElementById('infoNochesAcumuladas').textContent = totalNoches;
+      document.getElementById('infoNivelCliente').textContent = nivel;
+      document.getElementById('infoDescuentoFrecuente').textContent =
+        Math.round(descuentoFrecuente * 100) + '%';
+    }
+
+    calcularBeneficios();
+
+    // Cerrar sesión
+    function logout() {
+      localStorage.clear();
+      alert('Sesión cerrada.');
+      window.location.href = 'index.html';
+    }
+
+    // Botones Ver / Ocultar contraseña
+    document.querySelectorAll('.btn-toggle-pass').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        if (!input) return;
+
+        if (input.type === 'password') {
+          input.type = 'text';
+          btn.textContent = 'Ocultar';
+        } else {
+          input.type = 'password';
+          btn.textContent = 'Ver';
+        }
+      });
+    });
+
+    // Guardar cambios (solo simulación de cambio de contraseña)
+    document.getElementById('btnGuardarPerfil').addEventListener('click', () => {
+      const passActual = document.getElementById('passActual').value.trim();
+      const passNueva  = document.getElementById('passNueva').value.trim();
+      const passRepetir = document.getElementById('passRepetir').value.trim();
+      const contMensaje = document.getElementById('mensajePassword');
+
+      contMensaje.innerHTML = '';
+
+      if (!passActual || !passNueva || !passRepetir) {
+        contMensaje.innerHTML = `
+          <div class="alert alert-warning" role="alert">
+            Completá todos los campos de contraseña.
+          </div>`;
+        return;
+      }
+
+      if (passNueva !== passRepetir) {
+        contMensaje.innerHTML = `
+          <div class="alert alert-danger" role="alert">
+            Las nuevas contraseñas no coinciden.
+          </div>`;
+        return;
+      }
+
+      contMensaje.innerHTML = `
+        <div class="alert alert-success" role="alert">
+          Tu contraseña se cambió con éxito.
+        </div>`;
+
+      document.getElementById('passActual').value = '';
+      document.getElementById('passNueva').value = '';
+      document.getElementById('passRepetir').value = '';
+    });
+
+    /* ======================
+       Reseñas del usuario
+       ====================== */
+    const RESENAS_STORAGE_KEY = 'hotelAI_resenas_usuario';
+
+    function guardarResenas(arr){
+      localStorage.setItem(RESENAS_STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function cargarResenas(){
+      const cont = document.getElementById('listaResenas');
+      if (!cont) return;
+
+      const data = JSON.parse(localStorage.getItem(RESENAS_STORAGE_KEY) || '[]');
+
+      if (!data.length){
+        cont.innerHTML = '<p class="text-muted mb-0">Todavía no dejaste ninguna reseña. ¡Contanos tu experiencia!</p>';
+        return;
+      }
+
+      cont.innerHTML = '';
+      data.forEach((r, index) => {
+        const card = document.createElement('div');
+        card.className = 'border rounded-3 p-3 mb-3 bg-white shadow-sm resena-item';
+
+        let claseEstado = 'estado-pendiente';
+        if (r.estado === 'aprobada') claseEstado = 'estado-aprobada';
+        else if (r.estado === 'rechazada') claseEstado = 'estado-rechazada';
+
+        card.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <div>
+              <strong>${r.titulo}</strong><br>
+              <small class="text-muted">Fecha: ${r.fecha}</small>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-warning text-dark d-block mb-1">
+                ${'★'.repeat(r.puntaje)}${'☆'.repeat(5 - r.puntaje)}
+              </span>
+              <span class="badge-estado ${claseEstado}">
+                ${r.estado.charAt(0).toUpperCase() + r.estado.slice(1)}
+              </span>
+            </div>
+          </div>
+          <p class="mb-2">${r.texto}</p>
+          <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarResena(${index})">
+            Eliminar reseña
+          </button>
+        `;
+        cont.appendChild(card);
+      });
+    }
+
+    function eliminarResena(idx){
+      const data = JSON.parse(localStorage.getItem(RESENAS_STORAGE_KEY) || '[]');
+      if (idx < 0 || idx >= data.length) return;
+      if (!confirm('¿Seguro que querés eliminar esta reseña?')) return;
+
+      data.splice(idx, 1);
+      guardarResenas(data);
+      cargarResenas();
+    }
+
+    function manejarNuevaResena(ev){
+      ev.preventDefault();
+      const titulo = document.getElementById('tituloResena').value.trim();
+      const puntaje = parseInt(document.getElementById('puntajeResena').value, 10);
+      const texto = document.getElementById('textoResena').value.trim();
+      const mensaje = document.getElementById('mensajeResena');
+
+      mensaje.innerHTML = '';
+
+      if (!texto){
+        mensaje.innerHTML = `
+          <div class="alert alert-warning" role="alert">
+            Escribí al menos un comentario para tu reseña.
+          </div>`;
+        return;
+      }
+
+      const hoy = new Date();
+      const fecha = hoy.toLocaleDateString('es-AR');
+      const data = JSON.parse(localStorage.getItem(RESENAS_STORAGE_KEY) || '[]');
+
+      data.unshift({
+        titulo: titulo || 'Sin título',
+        puntaje: isNaN(puntaje) ? 5 : puntaje,
+        texto,
+        fecha,
+        estado: 'pendiente' // va al operador/admin
+      });
+
+      guardarResenas(data);
+      cargarResenas();
+
+      mensaje.innerHTML = `
+        <div class="alert alert-success" role="alert">
+          ¡Gracias por tu reseña! Quedó enviada para revisión del hotel.
+        </div>`;
+
+      document.getElementById('formResena').reset();
+      document.getElementById('puntajeResena').value = '5';
+    }
+
+    document.getElementById('formResena').addEventListener('submit', manejarNuevaResena);
+    cargarResenas();
+  </script>
+</body>
+</html>

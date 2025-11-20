@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Panel de Administrador · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+
+  <style>
+    /* ====== NAVBAR ====== */
+    .topbar{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee}
+    .topbar .wrap{display:flex;align-items:center;gap:16px;padding:.75rem 1rem}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .brand .dot{color:#e61c5d}
+    .nav a{margin:0 .25rem;text-decoration:none;padding:.4rem .7rem;border-radius:.5rem;color:#1d1d1f;font-weight:600}
+    .nav a.active{background:rgba(230,28,93,.10);color:#e61c5d}
+    .spacer{flex:1}
+    .user{display:flex;align-items:center;gap:.5rem}
+    .badge-role{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem;background:#f2f2f3}
+    .logout{border:0;background:#e61c5d;color:#fff;border-radius:999px;padding:.45rem .9rem;font-weight:700}
+
+    /* ====== BREADCRUMB (igual que reservas) ====== */
+    .breadcrumb{border-bottom:1px solid #eee;background:#fafafa}
+    .breadcrumb span{display:inline-block;padding:.5rem 1rem}
+    .breadcrumb a{text-decoration:none;color:#e61c5d;font-weight:600}
+
+    /* ====== TÍTULO Y SUBTÍTULO IGUALES A RESERVAS ====== */
+    .h1{font-size:2.5rem;font-weight:800;margin-bottom:.25rem}
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+  </style>
+</head>
+
+<body data-page="dashboard">
+  <!-- ====== NAVBAR ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+
+      <nav class="nav" id="mainNav">
+        <a href="admin-panel.html"        data-roles="admin,operador" data-page="dashboard">Panel</a>
+        <a href="admin-reservas.html"     data-roles="admin,operador" data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-roles="admin,operador" data-page="habitaciones">Habitaciones</a>
+        <a href="admin-usuarios.html"     data-roles="admin"          data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html"        data-roles="admin"          data-page="tipos">Tipos de habitaciones</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div id="userName">Usuario</div>
+        <span id="userRoleBadge" class="badge-role">ROL</span>
+        <button class="logout" id="btnLogout" title="Cerrar sesión" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== BREADCRUMB ====== -->
+  <div class="breadcrumb">
+    <span><a href="admin-panel.html">Panel</a></span>
+    <span id="bc-current">Dashboard</span>
+  </div>
+
+  <!-- ====== DASHBOARD ====== -->
+  <section class="container py-4">
+    <!-- Título y descripción con el mismo estilo que Reservas -->
+    <h1 class="h1 mb-2">Dashboard</h1>
+    <p class="p-muted">Consultas parametrizadas y visualización del estado del hotel.</p>
+
+    <!-- Filtros -->
+    <div class="d-flex align-items-end gap-3 flex-wrap mt-3">
+      <div>
+        <label class="form-label mb-1">Desde</label>
+        <input type="date" id="fDesde" class="form-control">
+      </div>
+      <div>
+        <label class="form-label mb-1">Hasta</label>
+        <input type="date" id="fHasta" class="form-control">
+      </div>
+      <button id="btnAplicar" class="btn btn-primary mb-1" style="height:42px">Aplicar</button>
+      <div class="ms-auto small text-muted" id="dscrRango"></div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="row g-3 mt-2">
+      <div class="col-sm-4">
+        <div class="card p-3">
+          <div class="text-muted">Reservas (rango)</div>
+          <div class="fs-2 fw-bold" id="kpiReservas">—</div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="card p-3">
+          <div class="text-muted">Ocupadas (rango)</div>
+          <div class="fs-2 fw-bold" id="kpiOcupadas">—</div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="card p-3">
+          <div class="text-muted">Ingresos (rango)</div>
+          <div class="fs-2 fw-bold" id="kpiIngresos">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row g-3 mt-2">
+      <div class="col-lg-6">
+        <div class="card p-3">
+          <div class="fw-semibold mb-2">Reservas por día</div>
+          <canvas id="chartDia"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card p-3">
+          <div class="fw-semibold mb-2">Estados en el rango</div>
+          <canvas id="chartEstados"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card p-3">
+          <div class="fw-semibold mb-2">Top tipos reservados</div>
+          <canvas id="chartTop"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card p-3">
+          <div class="fw-semibold mb-2">Ocupación actual</div>
+          <canvas id="chartOcupacion"></canvas>
+          <div class="small text-muted mt-2" id="ocupFoot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-outline-secondary" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </section>
+
+  <!-- ====== SCRIPTS BASE ====== -->
+  <script>
+    // Protección + UI por rol
+    (function initPanel(){
+      const token = localStorage.getItem('token');
+      const role  = localStorage.getItem('userRole'); // 'admin' | 'operador'
+      const name  = localStorage.getItem('userName') || 'Usuario';
+
+      if (!token || (role!=='admin' && role!=='operador')){
+        location.href = 'ingresar-admin.html';
+        return;
+      }
+
+      // Chip usuario
+      document.getElementById('userName').textContent = name;
+      const badge = document.getElementById('userRoleBadge');
+      badge.textContent = role;
+      if (role === 'admin') {
+        badge.style.background = 'rgba(230,28,93,.12)';
+        badge.style.color = '#e61c5d';
+      }
+
+      // Menú: ocultar ítems que no correspondan
+      const nav = document.getElementById('mainNav');
+      nav.querySelectorAll('a[data-roles]').forEach(a=>{
+        const ok = a.getAttribute('data-roles').split(',').map(s=>s.trim());
+        if (!ok.includes(role)) a.style.display = 'none';
+      });
+
+      // Marcar activo
+      const page = document.body.dataset.page || '';
+      nav.querySelectorAll('a[data-page]').forEach(a=>{
+        if (a.dataset.page === page) a.classList.add('active');
+      });
+    })();
+
+    function logout(){
+      localStorage.clear();
+      location.href = 'mi-cuenta.html';
+    }
+  </script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- ====== DASHBOARD (datos + charts) ====== -->
+  <script>
+  (function Dashboard(){
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    // Elementos
+    const fDesde = document.getElementById('fDesde');
+    const fHasta = document.getElementById('fHasta');
+    const btn    = document.getElementById('btnAplicar');
+    const dscr   = document.getElementById('dscrRango');
+
+    // Fechas por defecto: últimos 30 días
+    const hoy = new Date();
+    const desde = new Date(); desde.setDate(desde.getDate()-29);
+    fDesde.value = desde.toISOString().slice(0,10);
+    fHasta.value = hoy.toISOString().slice(0,10);
+    dscr.textContent = `Rango: ${fDesde.value} a ${fHasta.value}`;
+
+    // Charts
+    let chDia, chEstados, chTop, chOcup;
+
+    const money = v => (v==null ? '—' : new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS'}).format(v));
+
+    // --- Ocupación actual
+    async function cargarOcupacion() {
+      const r = await fetch('http://localhost:4000/api/admin/dashboard/ocupacion-actual', {
+        headers: { Authorization: 'Bearer ' + token }
+      });
+      if (!r.ok) return;
+      const d = await r.json();
+
+      const ctx = document.getElementById('chartOcupacion').getContext('2d');
+      const data = [d.ocupadas||0, d.disponibles||0, d.mantenimiento||0];
+      const labels = ['Ocupadas','Disponibles','Mantenimiento'];
+
+      if (chOcup) chOcup.destroy();
+      chOcup = new Chart(ctx, {
+        type:'doughnut',
+        data:{ labels, datasets:[{ data }] },
+        options:{ plugins:{ legend:{ position:'bottom' } }, cutout:'60%' }
+      });
+
+      document.getElementById('ocupFoot').textContent =
+        `Total habitaciones: ${d.total||0} · Ocupadas: ${d.ocupadas||0} · Disponibles: ${d.disponibles||0} · Mantenimiento: ${d.mantenimiento||0}`;
+    }
+
+    // --- Rango parametrizado
+    async function aplicarRango() {
+      dscr.textContent = `Rango: ${fDesde.value} a ${fHasta.value}`;
+      const url = new URL('http://localhost:4000/api/admin/dashboard/rango');
+      url.searchParams.set('desde', fDesde.value);
+      url.searchParams.set('hasta', fHasta.value);
+
+      const r = await fetch(url, { headers:{ Authorization:'Bearer '+token } });
+      if (!r.ok) { console.error(await r.text()); return; }
+      const { kpis, serie, estados, topTipos } = await r.json();
+
+      // KPIs
+      document.getElementById('kpiReservas').textContent = kpis.total_reservas ?? 0;
+      document.getElementById('kpiOcupadas').textContent = kpis.total_ocupadas ?? 0;
+      document.getElementById('kpiIngresos').textContent = money(kpis.ingresos);
+
+      // Serie por día
+      const l1 = serie.map(x=> x.fecha?.slice(5));
+      const v1 = serie.map(x=> x.cantidad);
+      chDia?.destroy();
+      chDia = new Chart(document.getElementById('chartDia').getContext('2d'), {
+        type:'line',
+        data:{ labels:l1, datasets:[{ data:v1, tension:.3 }] },
+        options:{ plugins:{ legend:{display:false} }, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 }}}}
+      });
+
+      // Estados en el rango
+      const l2 = estados.map(x=> x.estado || '—');
+      const v2 = estados.map(x=> x.cantidad);
+      chEstados?.destroy();
+      chEstados = new Chart(document.getElementById('chartEstados').getContext('2d'), {
+        type:'bar',
+        data:{ labels:l2, datasets:[{ data:v2 }] },
+        options:{ plugins:{ legend:{display:false} }, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 }}}}
+      });
+
+      // Top tipos
+      const l3 = topTipos.map(x=> x.etiqueta || '—');
+      const v3 = topTipos.map(x=> x.cantidad);
+      chTop?.destroy();
+      chTop = new Chart(document.getElementById('chartTop').getContext('2d'), {
+        type:'bar',
+        data:{ labels:l3, datasets:[{ data:v3 }] },
+        options:{ indexAxis:'y', plugins:{ legend:{display:false} }, scales:{ x:{ beginAtZero:true, ticks:{ precision:0 }}}}
+      });
+    }
+
+    btn.addEventListener('click', aplicarRango);
+    cargarOcupacion();
+    aplicarRango();
+  })();
+  </script>
+
+</body>
+</html>

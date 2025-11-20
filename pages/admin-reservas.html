@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Reservas · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+
+  <style>
+    /* === Topbar igual al panel === */
+    .topbar{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee}
+    .topbar .wrap{display:flex;align-items:center;gap:16px;padding:.75rem 1rem}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .brand .dot{color:#e61c5d}
+    .nav a{margin:0 .25rem;text-decoration:none;padding:.4rem .7rem;border-radius:.5rem;color:#1d1d1f;font-weight:600}
+    .nav a.active{background:rgba(230,28,93,.10);color:#e61c5d}
+    .spacer{flex:1}
+    .user{display:flex;align-items:center;gap:.5rem}
+    .badge-role{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem;background:#f2f2f3}
+    .logout{border:0;background:#e61c5d;color:#fff;border-radius:999px;padding:.45rem .9rem;font-weight:700}
+    .breadcrumb{border-bottom:1px solid #eee;background:#fafafa}
+    .breadcrumb span{display:inline-block;padding:.5rem 1rem}
+    .breadcrumb a{text-decoration:none}
+
+    /* === Ajustes de contenido === */
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:20px;margin-top:1rem}
+    .h1{font-size:2.5rem;font-weight:800;margin-bottom:.25rem}
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+    .input{border:1px solid #ddd;border-radius:8px;padding:.55rem .7rem;width:260px}
+    .btn-brand{background:#e61c5d;color:#fff;font-weight:600;border-radius:999px;padding:.5rem 1rem;border:0}
+    .btn-brand:hover{background:#c81851}
+    .btn-ghost{border:1px solid #ddd;background:transparent;border-radius:999px;padding:.45rem 1rem;font-weight:500}
+    .table thead th{background:#fafafa}
+    .table td,.table th{vertical-align:middle}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1rem}
+    .badge-ok{background:rgba(31,160,80,.12);color:#1fa050;padding:.25rem .5rem;border-radius:999px;font-weight:600}
+    .badge-warn{background:rgba(240,170,0,.12);color:#c38700;padding:.25rem .5rem;border-radius:999px;font-weight:600}
+    .badge-bad{background:rgba(230,28,93,.12);color:#e61c5d;padding:.25rem .5rem;border-radius:999px;font-weight:600}
+    .badge-neutral{background:#f2f2f3;color:#444;padding:.25rem .5rem;border-radius:999px;font-weight:600}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:9999}
+    .modal-content{background:#fff;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.15);width:100%;max-width:520px}
+  </style>
+</head>
+
+<body data-page="reservas">
+  <!-- ====== NAVBAR ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+      <nav class="nav" id="mainNav">
+        <a href="operador-panel.html" data-page="dashboard">Panel</a>
+        <a href="admin-reservas.html" data-page="reservas" class="active">Reservas</a>
+        <a href="admin-habitaciones.html" data-page="habitaciones">Habitaciones</a>
+        <a href="operador-mapa.html" data-page="mapa">Mapa</a>
+        <a href="operador-responder.html" data-page="mail">Responder mail</a>
+        <a href="admin-usuarios.html" data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html" data-page="tipos">Tipos de habitaciones</a>
+
+      </nav>
+      <div class="spacer"></div>
+      <div class="user">
+        <div id="userName">Operador</div>
+        <span id="userRoleBadge" class="badge-role">operador</span>
+        
+        <button class="logout" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span><a href="operador-panel.html">Panel</a></span>
+    <span>Reservas</span>
+  </div>
+
+  <!-- ====== CONTENIDO ====== -->
+  <section class="container py-4">
+    <h1 class="h1 mb-2">Reservas</h1>
+    <p class="p-muted">Últimas reservas con su estado y período.</p>
+
+    <div class="card">
+      <div class="toolbar">
+        <input id="q" class="input" placeholder="Buscar por cliente, email, hab., estado…">
+        <div class="ms-auto d-flex gap-2">
+          <button class="btn-brand" id="btnAddReserva">+ Agregar reserva</button>
+          <a id="backLink2" class="btn btn-ghost">← Volver</a>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>ID</th><th>Cliente</th><th>Email</th>
+              <th>Hab.</th><th>Tipo</th><th>Desde → Hasta</th><th>Estado</th>
+              <th style="width:170px">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== MODAL CREAR RESERVA ====== -->
+  <div id="modalReserva" class="modal">
+    <div class="modal-content">
+      <h3>Nueva reserva</h3>
+      <label class="form-label mt-2">ID Usuario</label>
+      <input id="resUsuario" class="form-control">
+      <label class="form-label mt-2">Habitación ID</label>
+      <input id="resHabitacion" class="form-control">
+      <label class="form-label mt-2">Check-In</label>
+      <input type="date" id="resCheckin" class="form-control">
+      <label class="form-label mt-2">Check-Out</label>
+      <input type="date" id="resCheckout" class="form-control">
+      <label class="form-label mt-2">Total</label>
+      <input id="resTotal" type="number" step="0.01" class="form-control">
+      <div class="mt-3 d-flex justify-content-end gap-2">
+        <button class="btn btn-ghost" id="cancelReserva">Cancelar</button>
+        <button class="btn-brand" id="confirmReserva">Crear reserva</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== MODAL DE PAGO ====== -->
+  <div id="payModal" class="modal" role="dialog" aria-modal="true" aria-label="Procesar pago">
+    <div class="modal-content">
+      <h3>Procesar pago</h3>
+      <p id="payResumen" class="p-muted"></p>
+
+      <div class="row g-2">
+        <div class="col-md-6">
+          <label class="form-label mb-1">Medio</label>
+          <select id="payMedio" class="form-select">
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta">Tarjeta</option>
+            <option value="transferencia">Transferencia</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label mb-1">Monto</label>
+          <input id="payMonto" type="number" step="0.01" min="0.01" class="form-control">
+        </div>
+      </div>
+
+      <label class="form-label mt-2">Observación</label>
+      <input id="payObs" class="form-control">
+
+      <div class="mt-3 d-flex justify-content-end gap-2">
+        <button id="payCancelar" class="btn btn-ghost">Cancelar</button>
+        <button id="payConfirmar" class="btn-brand">Confirmar pago</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SCRIPT PRINCIPAL ====== -->
+  <script>
+  (async function(){
+    const t = localStorage.getItem('token');
+    const r = localStorage.getItem('userRole');
+    if (!t || (r!=='admin' && r!=='operador')) { location.href = 'ingresar-admin.html'; return; }
+
+    // CARGAR RESERVAS
+    const rs = await fetch('http://localhost:4000/api/admin/reservas', { headers:{ Authorization:'Bearer '+t } });
+    if(!rs.ok){ alert('No autorizado'); return; }
+    const data = await rs.json();
+
+    const tbody = document.getElementById('tbody');
+    const q = document.getElementById('q');
+    const fmt = d => (d||'').slice(0,10);
+    const badge = s=>{
+      s=(s||'').toLowerCase();
+      if(s.includes('pend')) return `<span class="badge-warn">Pendiente</span>`;
+      if(s.includes('conf')) return `<span class="badge-ok">Confirmada</span>`;
+      if(s.includes('canc')) return `<span class="badge-bad">Cancelada</span>`;
+      if(s.includes('final'))return `<span class="badge-neutral">Finalizada</span>`;
+      return `<span class="badge-neutral">${s||'-'}</span>`;
+    };
+    const acciones = id => `<button class="btn btn-ghost btn-xs pay-btn" data-id="${id}">Procesar pago</button>`;
+    const paint = arr => tbody.innerHTML = arr.map(r=>`
+      <tr>
+        <td>${r.id}</td><td>${r.cliente||'-'}</td><td>${r.email_cliente||'-'}</td>
+        <td>${r.habitacion||'-'}</td><td>${r.tipo||'-'}</td>
+        <td>${fmt(r.fecha_desde)} → ${fmt(r.fecha_hasta)}</td>
+        <td>${badge(r.estado)}</td><td>${acciones(r.id)}</td>
+      </tr>`).join('');
+    paint(data);
+
+    // BUSCADOR
+    q.addEventListener('input', ()=>{
+      const v = q.value.toLowerCase();
+      paint(data.filter(r =>
+        String(r.id).includes(v) ||
+        (r.cliente||'').toLowerCase().includes(v) ||
+        (r.email_cliente||'').toLowerCase().includes(v) ||
+        (r.habitacion||'').toLowerCase().includes(v) ||
+        (r.tipo||'').toLowerCase().includes(v) ||
+        (r.estado||'').toLowerCase().includes(v)
+      ));
+    });
+
+    // CREAR RESERVA
+    const modalReserva=document.getElementById('modalReserva');
+    document.getElementById('btnAddReserva').onclick=()=>modalReserva.style.display='flex';
+    document.getElementById('cancelReserva').onclick=()=>modalReserva.style.display='none';
+    document.getElementById('confirmReserva').onclick=async()=>{
+      const u=document.getElementById('resUsuario').value;
+      const h=document.getElementById('resHabitacion').value;
+      const ci=document.getElementById('resCheckin').value;
+      const co=document.getElementById('resCheckout').value;
+      const tot=document.getElementById('resTotal').value;
+      if(!u||!h||!ci||!co){alert('Completá todos los campos');return;}
+      const res=await fetch('http://localhost:4000/api/operador/reservas',{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},
+        body:JSON.stringify({usuario_id:u,habitacion_id:h,checkin:ci+'T00:00',checkout:co+'T00:00',total:tot})
+      });
+      const txt=await res.text();
+      if(!res.ok){alert(txt||'Error');return;}
+      alert('Reserva creada correctamente');location.reload();
+    };
+
+    // MODAL DE PAGO
+    const modal=document.getElementById('payModal');
+    const payResumen=document.getElementById('payResumen');
+    const payMedio=document.getElementById('payMedio');
+    const payMonto=document.getElementById('payMonto');
+    const payObs=document.getElementById('payObs');
+    let currentId=null;
+    const close=()=>{modal.style.display='none';currentId=null;};
+    document.getElementById('payCancelar').onclick=close;
+    document.getElementById('payConfirmar').onclick=async()=>{
+      const m=Number(payMonto.value);
+      if(!m||m<=0){alert('Monto inválido');return;}
+      const rPago=await fetch(`http://localhost:4000/api/admin/reservas/${currentId}/pagos`,{
+        method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},
+        body:JSON.stringify({medio:payMedio.value,monto:m,moneda:'ARS',obs:payObs.value})
+      });
+      const txt=await rPago.text();
+      if(!rPago.ok){alert(txt||'Error al registrar pago');return;}
+      close();location.reload();
+    };
+    tbody.addEventListener('click',async ev=>{
+      const btn=ev.target.closest('.pay-btn');
+      if(!btn)return;
+      currentId=btn.dataset.id;
+      const rSaldo=await fetch(`http://localhost:4000/api/admin/reservas/${currentId}/pagos`,{
+        headers:{Authorization:'Bearer '+t}
+      });
+      if(!rSaldo.ok){alert('No se pudo obtener saldo');return;}
+      const {resumen}=await rSaldo.json();
+      const tot=Number(resumen?.total||0).toFixed(2);
+      const pag=Number(resumen?.pagado||0).toFixed(2);
+      const sal=Number(resumen?.saldo||0).toFixed(2);
+      payResumen.textContent=`Total: $${tot} · Pagado: $${pag} · Saldo: $${sal}`;
+      payMonto.value=sal>0?sal:'';modal.style.display='flex';
+    });
+  })();
+
+  function logout(){localStorage.clear();location.href='mi-cuenta.html';}
+  </script>
+  <script>
+  (function ajustarSegunRol() {
+    const role = localStorage.getItem('userRole');
+    const name = localStorage.getItem('userName') || 'Usuario';
+
+    const userName = document.getElementById('userName');
+    const badge = document.getElementById('userRoleBadge');
+    if (userName) userName.textContent = name;
+    if (badge) {
+      badge.textContent = role;
+      if (role === 'admin') {
+        badge.style.background = 'rgba(230,28,93,.12)';
+        badge.style.color = '#e61c5d';
+      }
+    }
+
+    // Ajustar links del menú según rol
+    const nav = document.getElementById('mainNav');
+    if (!nav) return;
+
+    const links = nav.querySelectorAll('a[data-page]');
+    links.forEach(a => {
+      const page = a.getAttribute('data-page');
+      switch (page) {
+        case 'dashboard':
+          a.href = role === 'admin' ? 'admin-panel.html' : 'operador-panel.html';
+          break;
+        case 'reservas':
+          a.href = 'admin-reservas.html'; // se mantiene el mismo
+          break;
+        case 'habitaciones':
+          a.href = role === 'admin' ? 'admin-habitaciones.html' : 'admin-habitaciones.html';
+          break;
+        case 'mapa':
+          a.href = 'operador-mapa.html';
+          if (role !== 'operador') a.style.display = 'none';
+          break;
+        case 'mail':
+          a.href = 'operador-responder.html';
+          if (role !== 'operador') a.style.display = 'none';
+          break;
+        case 'usuarios':
+          a.href = 'admin-usuarios.html';
+          if (role !== 'admin') a.style.display = 'none';
+          break;
+        case 'tipos':
+          a.href = 'admin-tipos.html';
+          if (role !== 'admin') a.style.display = 'none';
+          break;
+      }
+    });
+
+    // Ajustar botón "Volver"
+    const back1 = document.getElementById('backLink');
+    const back2 = document.getElementById('backLink2');
+    const panelHref = (role === 'admin') ? 'admin-panel.html' : 'operador-panel.html';
+    if (back1) back1.href = panelHref;
+    if (back2) back2.href = panelHref;
+
+  })();
+  </script>
+
+</body>
+</html>

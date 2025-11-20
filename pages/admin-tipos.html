@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Tipos de habitación · Admin · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <link rel="stylesheet" href="../assets/custom/admin-layout.css">
+
+  <style>
+    /* Título y texto igual que Reservas/Habitaciones/Dashboard */
+    .h1{
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: .25rem;
+    }
+    .p-muted{
+      color: #6b6b6b;
+      margin-bottom: 1.25rem;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #eee;
+      border-radius:12px;
+      padding:16px;
+    }
+
+    .inline-edit{min-width:260px}
+    .btn-brand{background:#e61c5d;border:0;color:#fff;font-weight:700}
+    .btn-brand:hover{opacity:.9}
+  </style>
+</head>
+
+<body data-page="tipos">
+  <!-- ====== NAVBAR / TOPBAR ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+
+      <nav class="nav" id="mainNav">
+        <a href="admin-panel.html"        data-roles="admin,operador" data-page="dashboard">Panel</a>
+        <a href="admin-reservas.html"     data-roles="admin,operador" data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-roles="admin,operador" data-page="habitaciones">Habitaciones</a>
+        <a href="admin-usuarios.html"     data-roles="admin"          data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html"        data-roles="admin"          data-page="tipos">Tipos de habitaciones</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div id="userName">Usuario</div>
+        <span id="userRoleBadge" class="badge-role">ROL</span>
+        <button class="logout" id="btnLogout" title="Cerrar sesión" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span><a href="admin-panel.html">Panel</a></span>
+    <span>Tipos de habitación</span>
+  </div>
+
+  <!-- ====== CONTENIDO (misma estructura que Reservas) ====== -->
+  <section class="container py-4">
+    <h1 class="h1 mb-2">Tipos de habitación</h1>
+    <p class="p-muted">Administrá los tipos que se asignan a las habitaciones.</p>
+
+    <div class="card">
+      <div class="d-flex gap-2 my-2 flex-wrap">
+        <input id="nombre" class="form-control inline-edit" placeholder="Nombre del tipo (p.ej. Estándar_2p)">
+        <button class="btn btn-brand" id="btnAdd">Agregar</button>
+        <a class="btn btn-ghost ms-auto" href="admin-panel.html">← Volver</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th style="width:90px">ID</th>
+              <th>Nombre</th>
+              <th style="width:220px">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== TOPBAR INIT (roles/activo) ====== -->
+  <script>
+    (function initTopbar(){
+      const token = localStorage.getItem('token');
+      const role  = localStorage.getItem('userRole');
+      const name  = localStorage.getItem('userName') || 'Usuario';
+
+      // Esta pantalla es solo ADMIN
+      if (!token || role!=='admin'){
+        location.href = 'ingresar-admin.html';
+        return;
+      }
+
+      document.getElementById('userName').textContent = name;
+      const badge = document.getElementById('userRoleBadge');
+      badge.textContent = role;
+      badge.style.background = 'rgba(230,28,93,.12)';
+      badge.style.color = '#e61c5d';
+
+      const nav = document.getElementById('mainNav');
+      nav.querySelectorAll('a[data-roles]').forEach(a=>{
+        const ok = a.getAttribute('data-roles').split(',').map(s=>s.trim());
+        if (!ok.includes(role)) a.style.display = 'none';
+      });
+
+      const page = document.body.dataset.page || '';
+      nav.querySelectorAll('a[data-page]').forEach(a=>{
+        if (a.dataset.page === page) a.classList.add('active');
+      });
+    })();
+
+    function logout(){
+      localStorage.clear();
+      location.href = 'mi-cuenta.html';
+    }
+  </script>
+
+  <!-- ====== LÓGICA TIPOS ====== -->
+  <script>
+    const token = localStorage.getItem('token'); 
+    const rol   = localStorage.getItem('userRole');
+    if (!token || rol!=='admin') location.href='ingresar-admin.html';
+
+    const tbody = document.getElementById('tbody');
+
+    async function cargar() {
+      const r = await fetch('http://localhost:4000/api/admin/tipos-habitacion', {
+        headers:{Authorization:'Bearer '+token}
+      });
+      const data = await r.json();
+      tbody.innerHTML = data.map(t=>`
+        <tr>
+          <td>${t.id}</td>
+          <td>
+            <input data-id="${t.id}" class="form-control form-control-sm inline-edit" value="${t.nombre}">
+          </td>
+          <td>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-primary" onclick="guardar(${t.id})">Guardar</button>
+              <button class="btn btn-sm btn-outline-danger" onclick="borrar(${t.id})">Eliminar</button>
+            </div>
+          </td>
+        </tr>`).join('');
+    }
+
+    async function agregar(){
+      const nombre = document.getElementById('nombre').value.trim();
+      if(!nombre) return alert('Ingresá un nombre');
+      const r = await fetch('http://localhost:4000/api/admin/tipos-habitacion',{
+        method:'POST',
+        headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+        body:JSON.stringify({nombre})
+      });
+      if(!r.ok){ alert('No se pudo crear'); return;}
+      document.getElementById('nombre').value='';
+      cargar();
+    }
+
+    async function guardar(id){
+      const input = document.querySelector(`.inline-edit[data-id="${id}"]`);
+      const r = await fetch(`http://localhost:4000/api/admin/tipos-habitacion/${id}`,{
+        method:'PUT',
+        headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+        body:JSON.stringify({nombre: (input.value||'').trim()})
+      });
+      if(!r.ok){ alert('No se pudo guardar'); return;}
+      cargar();
+    }
+
+    async function borrar(id){
+      if(!confirm('¿Eliminar tipo?')) return;
+      const r = await fetch(`http://localhost:4000/api/admin/tipos-habitacion/${id}`,{
+        method:'DELETE',
+        headers:{Authorization:'Bearer '+token}
+      });
+      if(!r.ok){ alert('No se pudo eliminar'); return;}
+      cargar();
+    }
+
+    document.getElementById('btnAdd').onclick = agregar;
+    window.guardar = guardar;
+    window.borrar  = borrar;
+
+    cargar();
+  </script>
+</body>
+</html>

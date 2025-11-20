@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Habitaciones · Admin/Operador · Hotel Alejandro I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/villa/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/villa/css/style.css">
+  <link rel="stylesheet" href="../assets/custom/admin-layout.css">
+
+  <style>
+    .container-admin{max-width:1200px;margin:32px auto;padding:0 16px}
+
+    /* mismo estilo que Reservas/Dashboard */
+    .h1{
+      font-size:2.5rem;      /* antes 48px */
+      font-weight:800;
+      margin-bottom:.25rem;
+    }
+
+    .p-muted{color:#6b6b6b;margin-bottom:1.25rem}
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px}
+    .input{border:1px solid #ddd;border-radius:8px;padding:.55rem .7rem}
+    .btn.btn-ghost{border:0;background:transparent;color:#1d1d1f}
+    .badge{padding:.25rem .5rem;border-radius:999px;font-weight:700;font-size:.8rem}
+    .badge-ok{background:rgba(31,160,80,.12);color:#1fa050}
+    .badge-warn{background:rgba(240,170,0,.12);color:#c38700}
+    .badge-bad{background:rgba(230,28,93,.12);color:#e61c5d}
+    .badge-neutral{background:#f2f2f3}
+  </style>
+</head>
+
+<body data-page="habitaciones">
+  <!-- ====== NAVBAR / TOPBAR ====== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">HOTEL <span class="dot">ALEJANDRO I</span></div>
+
+      <nav class="nav" id="mainNav">
+        <a href="#" data-roles="admin,operador" data-page="dashboard" id="linkPanel">Panel</a>
+        <a href="admin-reservas.html"     data-roles="admin,operador" data-page="reservas">Reservas</a>
+        <a href="admin-habitaciones.html" data-roles="admin,operador" data-page="habitaciones">Habitaciones</a>
+        <a href="admin-usuarios.html"     data-roles="admin"          data-page="usuarios">Usuarios</a>
+        <a href="admin-tipos.html"        data-roles="admin"          data-page="tipos">Tipos de habitaciones</a>
+        <a href="operador-mapa.html"      data-roles="operador"       data-page="mapa">Mapa</a>
+        <a href="operador-responder.html" data-roles="operador"       data-page="mail">Responder mail</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div id="userName">Usuario</div>
+        <span id="userRoleBadge" class="badge-role">ROL</span>
+        <button class="logout" id="btnLogout" title="Cerrar sesión" onclick="logout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span><a id="bcHome" href="#">Panel</a></span>
+    <span>Habitaciones</span>
+  </div>
+
+  <!-- ====== CONTENIDO ====== -->
+  <div class="container-admin">
+    <div class="header">
+      <div class="h1">Habitaciones</div>
+      <p class="p-muted">Listado de habitaciones</p>
+    </div>
+
+    <div class="card">
+      <div class="toolbar" style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px">
+        <input id="q" class="input" placeholder="Buscar (número, piso, tipo o estado)…">
+        <select id="fPiso" class="input" style="width:140px"><option value="">Todos los pisos</option></select>
+        <select id="fTipo" class="input" style="width:220px"><option value="">Todos los tipos</option></select>
+        <select id="fCapacidad" class="input" style="width:170px">
+          <option value="">Todas las personas</option>
+        </select>
+        <select id="fEstado" class="input" style="width:180px">
+          <option value="">Todos los estados</option>
+          <option value="abierta">Disponible</option>
+          <option value="cerrada">Ocupada</option>
+          <option value="mantenimiento">Mantenimiento</option>
+        </select>
+        <div style="margin-left:auto;display:flex;gap:10px">
+          <button id="btnCsv" class="btn btn-ghost">Exportar CSV</button>
+          <button id="btnNueva" class="btn btn-brand" style="display:none">Nueva habitación</button>
+          <a id="backLink" class="btn btn-ghost">← Volver</a>
+        </div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Número</th><th>Piso</th><th>Tipo</th><th>Personas</th><th>Estado</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== TOPBAR INIT (roles/activo) ====== -->
+  <script>
+    (function initTopbar(){
+      const token = localStorage.getItem('token');
+      const role  = (localStorage.getItem('userRole') || '').toLowerCase();
+      const name  = localStorage.getItem('userName') || 'Usuario';
+
+      if (!token || (role!=='admin' && role!=='operador')){
+        location.href = 'ingresar-admin.html';
+        return;
+      }
+
+      // Ajustar link del panel según el rol
+      const linkPanel = document.getElementById('linkPanel');
+      if (linkPanel) {
+        linkPanel.href = (role === 'operador')
+          ? 'operador-panel.html'
+          : 'admin-panel.html';
+      }
+
+      // Nombre + badge
+      document.getElementById('userName').textContent = name;
+      const badge = document.getElementById('userRoleBadge');
+      badge.textContent = role;
+      if (role === 'admin') { 
+        badge.style.background = 'rgba(230,28,93,.12)'; 
+        badge.style.color = '#e61c5d'; 
+      }
+
+      // Menú visible según rol
+      const nav = document.getElementById('mainNav');
+      nav.querySelectorAll('a[data-roles]').forEach(a=>{
+        const ok = a.getAttribute('data-roles')
+                     .split(',')
+                     .map(s=>s.trim().toLowerCase());
+        if (!ok.includes(role)) a.style.display = 'none';
+      });
+
+      // Item activo
+      const page = document.body.dataset.page || '';
+      nav.querySelectorAll('a[data-page]').forEach(a=>{
+        if (a.dataset.page === page) a.classList.add('active');
+      });
+
+      // Breadcrumb y botón Volver según rol
+      const home = document.getElementById('bcHome');
+      const back = document.getElementById('backLink');
+      const homeHref = (role === 'operador') ? 'operador-panel.html' : 'admin-panel.html';
+      if (home) home.href = homeHref;
+      if (back) back.href = homeHref;
+    })();
+
+    function logout(){
+      localStorage.clear();
+      location.href = 'mi-cuenta.html';
+    }
+  </script>
+
+  <!-- ====== LÓGICA DE HABITACIONES ====== -->
+  <script>
+    const token = localStorage.getItem('token');
+    const rol   = (localStorage.getItem('userRole') || '').toLowerCase();
+    if (!token || (rol!=='admin' && rol!=='operador')) location.href='ingresar-admin.html';
+
+    // UI refs
+    const tbody    = document.getElementById('tbody');
+    const qInput   = document.getElementById('q');
+    const sPiso    = document.getElementById('fPiso');
+    const sTipo    = document.getElementById('fTipo');
+    const sEstado  = document.getElementById('fEstado');
+    const btnNueva = document.getElementById('btnNueva');
+    const btnCsv   = document.getElementById('btnCsv');
+    const sCapacidad = document.getElementById('fCapacidad');
+
+    if (rol==='admin') btnNueva.style.display = 'inline-flex';
+
+    let base = [];
+    let tipos = [];
+
+    const acciones = (id) => `
+      <button class="btn btn-ghost btn-xs" data-id="${id}" data-act="abrir">Abrir</button>
+      <button class="btn btn-ghost btn-xs" data-id="${id}" data-act="ocupar">Ocupar</button>
+      <button class="btn btn-ghost btn-xs" data-id="${id}" data-act="mantenimiento">Mantenimiento</button>
+    `;
+
+    function prettyEstado(dbEstado) {
+      const v = String(dbEstado || '').toLowerCase();
+      if (v.includes('cerr')) return 'Ocupada';
+      if (v.includes('abier') || v.includes('disp')) return 'Disponible';
+      if (v.includes('mant')) return 'Mantenimiento';
+      return v || '—';
+    }
+    function estadoBadgeClass(dbEstado) {
+      const v = String(dbEstado || '').toLowerCase();
+      if (v.includes('cerr')) return 'badge badge-bad';
+      if (v.includes('abier') || v.includes('disp')) return 'badge badge-ok';
+      if (v.includes('mant')) return 'badge badge-warn';
+      return 'badge badge-neutral';
+    }
+
+    function capacidadDesdeTipoDb(nombre) {
+      if (!nombre) return null;
+      const m = String(nombre).match(/_(\d+)p/i);
+      return m ? parseInt(m[1], 10) : null;
+    }    
+
+    function render(rows){
+      tbody.innerHTML = rows.map(d=>`
+        <tr>
+          <td>${d.id}</td>
+          <td>${d.numero}</td>
+          <td>${d.piso}</td>
+          <td>${d.tipo ?? '-'}</td>
+          <td>${d.capacidad ?? '-'}</td>
+          <td><span class="${estadoBadgeClass(d.estado)}">${prettyEstado(d.estado)}</span></td>
+          <td>${acciones(d.id)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filtrar() {
+      const v  = (qInput.value || '').toLowerCase().trim();
+      const fp = sPiso.value;
+      const ft = sTipo.value;
+      const fe = sEstado.value;
+      const fc = sCapacidad.value;
+
+      const rows = base.filter(x => {
+        if (fp && String(x.piso) !== String(fp)) return false;
+        if (ft && String(x.tipo || '').toLowerCase() !== ft) return false;
+        if (fc && String(x.capacidad) !== fc) return false;
+        if (fe) {
+          const se = String(x.estado || '').toLowerCase();
+          if (!se.includes(fe) &&
+              !(fe==='abierta' && (se.includes('abier') || se.includes('disp'))))
+            return false;
+        }
+        if (!v) return true;
+        return (
+          String(x.id).includes(v) ||
+          String(x.numero).toLowerCase().includes(v) ||
+          String(x.piso).toLowerCase().includes(v) ||
+          String(x.tipo || '').toLowerCase().includes(v) ||
+          String(x.estado || '').toLowerCase().includes(v)
+        );
+      });
+
+      render(rows);
+    }
+
+    // acciones (delegadas)
+    tbody.addEventListener('click', async (e) => {
+      const act = e.target?.dataset?.act;
+      const id  = e.target?.dataset?.id;
+      if (!act || !id) return;
+
+      const r = await fetch(`http://localhost:4000/api/admin/habitaciones/${id}/estado`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({ estado: act })
+      });
+
+      const text = await r.text();
+      if (!r.ok) { alert('No se pudo actualizar\n\n' + text); return; }
+
+      const h = base.find(x => String(x.id) === String(id));
+      if (h) {
+        h.estado = act === 'ocupar' ? 'cerrada'
+                : act === 'abrir'  ? 'abierta'
+                : 'mantenimiento';
+      }
+      filtrar();
+    });
+
+    // CSV export
+    btnCsv.addEventListener('click', ()=>{
+      const rows = tbody.querySelectorAll('tr');
+      const data = [['ID','Numero','Piso','Tipo','Personas','Estado']];
+      rows.forEach(tr=>{
+        const tds = tr.querySelectorAll('td');
+        data.push([...tds].map(td=>td.innerText || ''));
+      });
+      const csv = data.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'habitaciones.csv';
+      a.click();
+    });
+
+    // cargar data
+    (async ()=>{
+      const res = await fetch('http://localhost:4000/api/admin/habitaciones', {
+        headers: { Authorization: 'Bearer '+token }
+      });
+      if(!res.ok){
+        const txt = await res.text();
+        alert('No autorizado o error al cargar habitaciones\n\n' + txt);
+        return;
+      }
+      base = await res.json();
+
+      base.forEach(h => {
+        if (h.tipo_db && (h.capacidad == null)) {
+          h.capacidad = capacidadDesdeTipoDb(h.tipo_db);
+        }
+      });
+
+      // filtros
+      const caps = [...new Set(base.map(h => h.capacidad).filter(c => c != null))].sort((a,b)=>a-b);
+      sCapacidad.innerHTML = '<option value="">Todas las personas</option>' +
+        caps.map(c => `<option value="${c}">${c} persona${c > 1 ? 's' : ''}</option>`).join('');
+
+      try {
+        const rt = await fetch('http://localhost:4000/api/admin/tipos-habitacion', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (rt.ok) tipos = await rt.json();
+      } catch {}
+
+      const pisos = [...new Set(base.map(x => x.piso))].sort((a,b)=>a-b);
+      sPiso.innerHTML = '<option value="">Todos los pisos</option>' +
+        pisos.map(p=>`<option value="${p}">${p}</option>`).join('');
+
+      const tiposUnicos = [...new Set(base.map(h => h.tipo))].filter(Boolean);
+      sTipo.innerHTML = '<option value="">Todos los tipos</option>' +
+        tiposUnicos.map(t=>`<option value="${t.toLowerCase()}">${t}</option>`).join('');
+
+      render(base);
+
+      qInput.addEventListener('input', filtrar);
+      sPiso.addEventListener('change', filtrar);
+      sTipo.addEventListener('change', filtrar);
+      sEstado.addEventListener('change', filtrar);
+      sCapacidad.addEventListener('change', filtrar);
+    })();
+  </script>
+</body>
+</html>
